@@ -8,6 +8,7 @@ class Button extends GameObject
 {
 	
 	public var pressed(default, set):Bool = false;
+	private var pressTimer:Float = 0;
 	
 	public function new() 
 	{
@@ -25,13 +26,28 @@ class Button extends GameObject
 	}
 	
 	private function set_pressed(value:Bool):Bool {
-		
+		if (value)
+			pressTimer = 2;
+		if (pressed == value)
+			return pressed;
 		pressed = value;
 		
 		if (pressed)
+		{
 			animation.play("pressed");
+			if (triggers != -1)
+			{
+				cast (FlxG.state, PlayState).triggerObj(triggers);
+			}
+		}
 		else
+		{
 			animation.play("unpressed");
+			if (triggers != -1)
+			{
+				cast (FlxG.state, PlayState).untriggerObj(triggers);
+			}
+		}
 			
 		return pressed;
 	}
@@ -39,9 +55,16 @@ class Button extends GameObject
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (pressed)
+		{
+			if (pressTimer>0)
+				pressTimer -= elapsed;
+			else
+			{
+				pressed = false;
+			}
+		}
 		
-		//if (pressed)
-		//	pressed = false;
 		super.update(elapsed);
 	}
 	

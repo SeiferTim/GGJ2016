@@ -18,7 +18,7 @@ class Spell extends FlxSprite
 	{
 		super();
 		loadGraphic(AssetPaths.Spell_Plumes__png, true, 32, 32);
-		animation.add("sparkles", [0, 1, 2, 3], 12, true);
+		animation.add("sparkles", [0, 1, 2], 12, true);
 		animation.play("sparkles");
 	}
 	

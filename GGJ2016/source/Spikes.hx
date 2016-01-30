@@ -16,4 +16,23 @@ class Spikes extends GameObject
 		
 	}
 	
+	override function set_triggered(Value:Bool):Bool 
+	{
+		if (triggered == Value)
+			return triggered;
+		
+		super.set_triggered(Value);
+		
+		if (triggered)
+		{
+			y += 32;
+		}
+		else
+		{
+			y -= 32;
+		}
+		
+		return triggered;
+	}
+	
 }

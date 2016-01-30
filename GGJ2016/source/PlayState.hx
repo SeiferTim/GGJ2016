@@ -10,6 +10,8 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxArrayUtil;
+import haxe.ds.IntMap;
+import haxe.Json;
 import openfl.Assets;
 using StringTools;
 
@@ -23,6 +25,7 @@ class PlayState extends FlxState
 	private var wiz:Wiz;
 	private var p:Imp;
 	private var s:Spell;
+	private var objMap:IntMap<GameObject>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -32,15 +35,7 @@ class PlayState extends FlxState
 		
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
-		
-		var t:FlxTilemap = new FlxTilemap();
-		t.loadMapFromCSV(Assets.getText(AssetPaths.blank_map_walls__csv), AssetPaths.test_tile__png, 32, 32, null, 0, 0, 1);
-		t.y += 112;
-		walls.add(t);
-		
-		p = new Imp();
-		p.x = 32 * 2;
-		p.y = 122 + (32 * 2);
+		objMap = new IntMap<GameObject>();
 		
 		wiz = new Wiz();
 		wiz.x = 32;
@@ -50,6 +45,47 @@ class PlayState extends FlxState
 		s = new Spell();
 		s.alpha = 0;
 		add(s);
+		
+		var j:{ layers:Array<Dynamic> } = Json.parse(Assets.getText(AssetPaths.blank_map__json));
+		for (n in j.layers)
+		{
+			if (n.name == "walls")
+			{
+				var t:FlxTilemap = new FlxTilemap();
+				t.loadMapFromArray(n.data, 40, 19, AssetPaths.test_tile__png , 32, 32, null, 0, 0, 1);
+				t.y += 112;
+				walls.add(t);
+			}
+			else if (n.name == "objects")
+			{
+				for (o in cast(n.objects, Array<Dynamic>))
+				{
+					var properties:{ triggers:String } = o.properties;
+					var trig:Int = -1;
+					if (properties.triggers != null)
+						trig = Std.parseInt(properties.triggers);
+					var ob:GameObject = createEntity(o.type, o.id, trig);
+					ob.x = o.x;
+					ob.y = o.y+80;
+					objMap.set(o.id, ob);
+					entities.add(ob);
+				}
+			}
+		}
+		
+		p = new Imp();
+		p.x = 32 * 2;
+		p.y = 122 + (32 * 2);
+		entities.add(p);
+		
+		/*
+		
+		
+		
+		
+		
+		
+		
 		
 		var regex:EReg = new EReg("[ \t]*((\r\n)|\r|\n)[ \t]*", "g");
 		var lines:Array<String> = regex.split(Assets.getText(AssetPaths.blank_map_objects__csv));
@@ -86,28 +122,36 @@ class PlayState extends FlxState
 		}
 		
 		
-		entities.add(p);
+		
+		
+		
+		*/
 		
 		add(walls);
 		
 		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
 		add(r);
 		add(entities);
-		
-		
 		super.create();
 	}
 	
-	public function createEntity(EntityID:Int):GameObject
+	public function createEntity(ObjType:String, Id:Int, Triggers:Int=-1):GameObject
 	{
-		switch (EntityID)
+		var o:GameObject;
+		switch (ObjType)
 		{
-			case 0:
-				return cast new Spikes();
-			case 1:
-				return cast new Button();
+			case "spikes":
+				o = cast new Spikes();
+				
+			case "button":
+				
+				o = cast new Button();
+			default:
+				return null;
 		}
-		return null;
+		o.id = Id;
+		o.triggers = Triggers;
+		return o;
 	}
 	
 	/**
@@ -178,5 +222,23 @@ class PlayState extends FlxState
 			return true;
 		}
 		return false;
+	}
+	
+	public function triggerObj(ObjID:Int):Void
+	{
+		var o:GameObject = objMap.get(ObjID);
+		if (o != null)
+		{
+			o.triggered = true;
+		}
+	}
+	
+	public function untriggerObj(ObjID:Int):Void
+	{
+		var o:GameObject = objMap.get(ObjID);
+		if (o != null)
+		{
+			o.triggered = false;
+		}
 	}
 }
