@@ -15,6 +15,7 @@ class Wiz extends FlxSprite
 		animation.add("cast", [3], 12, true);
 		animation.play("cast");
 		casting = true;
+		velocity.x = 10;
 		
 	}
 	
