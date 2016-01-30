@@ -30,6 +30,7 @@ class PlayState extends FlxState
 	private var p:Imp;
 	private var s:Spell;
 	private var objMap:IntMap<GameObject>;
+	private var doorMap:IntMap<Door>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -41,6 +42,17 @@ class PlayState extends FlxState
 		entities = new FlxTypedGroup<GameObject>();
 		platforms = new FlxTypedGroup<MovingPlatform>();
 		objMap = new IntMap<GameObject>();
+		doorMap = new IntMap<Door>();
+		
+		var d:Door = new Door(350-16, 32+16, 0);
+		doorMap.set(0, d);
+		add(d);
+		d = new Door(640 - 16, 32+16, 1);
+		doorMap.set(1, d);
+		add(d);
+		d = new Door(950-16, 32+16, 2);
+		doorMap.set(2, d);
+		add(d);
 		
 		wiz = new Wiz();
 		wiz.x = 32;
