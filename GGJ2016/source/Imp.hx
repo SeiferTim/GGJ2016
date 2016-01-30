@@ -31,20 +31,29 @@ class Imp extends GameObject
 	
 	public function new()
 	{
-		super();
-		objType = Reg.OBJ_IMP;
-		loadGraphic(AssetPaths.imp_grey__png, true, 32, 32);
-		animation.add("standing", [0, 1, 2], 12, true);
-		animation.add("jumping", [2], 12, true);
-		animation.play("standing", true);
 		
+		super();
+		
+		
+		objType = Reg.OBJ_IMP;
+		loadGraphic(AssetPaths.Full_Grey__png , true, 32, 32);
+		animation.add("standing", [0, 1, 2], 6, false);
+		animation.add("jumping", [0, 1, 2], 6, false);
+		animation.add("walking", [3,4,5,6,7], 6, false);
+		animation.play("standing", true);
+		setFacingFlip(FlxObject.LEFT, true, false);
+		setFacingFlip ( FlxObject.RIGHT, false, false);
 		
 		
 		faceFrames = new FlxSprite();
-		faceFrames.loadGraphic(AssetPaths.imp_color__png, true, 32, 32);
-		faceFrames.animation.add("standing", [0, 1, 2], 12, true);
-		faceFrames.animation.add("jumping", [2], 12, true);
-		faceFrames.animation.play("standing", true);
+		faceFrames.loadGraphic(AssetPaths.Full_Color__png, true, 32, 32);
+		//faceFrames.animation.add("standing", [0, 1, 2], 12, false);
+		//faceFrames.animation.add("jumping", [0, 1, 2], 12, false);
+		//faceFrames.animation.add("walking", [3, 4, 5, 6, 7], 12, false);
+		//faceFrames.animation.play("standing", true);
+		
+		faceFrames.setFacingFlip(FlxObject.LEFT, true, false);
+		faceFrames.setFacingFlip ( FlxObject.RIGHT, false, false);
 		
 		acceleration.y = GRAVITY;
 		maxVelocity.set(400, GRAVITY);
@@ -56,10 +65,16 @@ class Imp extends GameObject
 			.start(Idle);
 	}
 	
+	override public function draw():Void 
+	{
+		if (!useFramePixels)
+			useFramePixels = true;
+		super.draw();
+	}
 	
 	override public function getFlxFrameBitmapData():BitmapData
 	{
-
+		
 		var doFlipX:Bool = checkFlipX();
 		var doFlipY:Bool = checkFlipY();
 		
@@ -89,8 +104,11 @@ class Imp extends GameObject
 		
 		var c:FlxColor = FlxColor.fromHSB(Std.int(hue * 360), 1, 1);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
+		
+		
 		if (faceFrames != null)
 		{
+			faceFrames.animation.frameIndex  = animation.frameIndex;
 			faceFrames.drawFrame(true);
 			framePixels.copyPixels(faceFrames.framePixels, faceFrames.framePixels.rect, new Point(), faceFrames.framePixels, new Point(), true);
 		}
@@ -144,8 +162,8 @@ class Idle extends FlxFSMState<Imp>
 {
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
-		owner.animation.play("standing", true);
-		owner.faceFrames.animation.play("standing", true);
+		owner.animation.play("standing");
+		//owner.faceFrames.animation.play("standing");
 		
 	}
 	
@@ -156,9 +174,9 @@ class Idle extends FlxFSMState<Imp>
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
 		if (left != right)
 		{
-			owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
-			owner.animation.play("jumping");
-			owner.faceFrames.animation.play("jumping");
+			owner.faceFrames.facing = owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
+			owner.animation.play("walking");
+			//owner.faceFrames.animation.play("walking");
 			if ((owner.velocity.x > 0 && left) || (owner.velocity.x < 0 && right))
 			{
 				owner.velocity.x = 0;
@@ -167,9 +185,19 @@ class Idle extends FlxFSMState<Imp>
 		}
 		else
 		{
-			owner.animation.play("standing", true);
-			owner.faceFrames.animation.play("standing", true);
-			owner.velocity.x *= 0.66;
+			if (Math.abs(owner.velocity.x) >= 0.05)
+			{
+				owner.animation.play("walking");
+				//owner.faceFrames.animation.play("walking");
+				owner.velocity.x *= 0.66;
+			}
+			else
+			{
+				owner.velocity.x = 0;
+				owner.animation.play("standing");
+				//owner.faceFrames.animation.play("standing");
+			}
+			
 		}
 	}
 }
@@ -179,8 +207,8 @@ class Jump extends FlxFSMState<Imp>
 {
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
-		owner.animation.play("jumping", true);
-		owner.faceFrames.animation.play("jumping", true);
+		owner.animation.play("jumping");
+		//owner.faceFrames.animation.play("jumping");
 		owner.velocity.y = -600;
 		
 	}
@@ -192,8 +220,9 @@ class Jump extends FlxFSMState<Imp>
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
 		if (left != right)
 		{
-			owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
+			owner.faceFrames.facing = owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
 			owner.acceleration.x = left ? -300 : 300;
+			
 			if ((owner.acceleration.x > 0 && left) || (owner.acceleration.x < 0 && right))
 			{
 				owner.velocity.x = 0;

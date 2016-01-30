@@ -131,7 +131,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":38,
                  "name":"",
@@ -147,7 +147,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":39,
                  "name":"",
@@ -163,7 +163,7 @@
                  "y":289
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":40,
                  "name":"",
@@ -179,7 +179,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":41,
                  "name":"",
@@ -195,7 +195,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":42,
                  "name":"",
@@ -211,7 +211,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":43,
                  "name":"",
@@ -227,7 +227,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":44,
                  "name":"",
@@ -243,7 +243,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":45,
                  "name":"",
@@ -259,7 +259,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":46,
                  "name":"",
@@ -275,7 +275,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":47,
                  "name":"",
@@ -291,7 +291,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":48,
                  "name":"",
@@ -307,7 +307,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":49,
                  "name":"",
@@ -323,7 +323,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":50,
                  "name":"",
@@ -339,7 +339,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":51,
                  "name":"",
@@ -355,7 +355,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":52,
                  "name":"",
@@ -371,7 +371,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":53,
                  "name":"",
@@ -387,7 +387,7 @@
                  "y":289
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":54,
                  "name":"",
@@ -403,7 +403,7 @@
                  "y":289
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":55,
                  "name":"",
@@ -419,7 +419,7 @@
                  "y":289
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":56,
                  "name":"",
@@ -435,7 +435,7 @@
                  "y":289
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":57,
                  "name":"",
@@ -451,7 +451,7 @@
                  "y":288
                 }, 
                 {
-                 "gid":6,
+                 "gid":7,
                  "height":32,
                  "id":58,
                  "name":"",
@@ -465,6 +465,22 @@
                  "width":32,
                  "x":1216,
                  "y":288
+                }, 
+                {
+                 "gid":6,
+                 "height":32,
+                 "id":59,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"spawn",
+                 "visible":true,
+                 "width":32,
+                 "x":33,
+                 "y":65
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -473,7 +489,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":59,
+ "nextobjectid":61,
  "orientation":"orthogonal",
  "properties":
     {
@@ -509,7 +525,7 @@
 
             },
          "spacing":0,
-         "tilecount":4,
+         "tilecount":5,
          "tileheight":32,
          "tiles":
             {
@@ -528,13 +544,17 @@
              "3":
                 {
                  "image":"..\/images\/Sigils.png"
+                },
+             "4":
+                {
+                 "image":"..\/images\/SpawnCircle.png"
                 }
             },
          "tilewidth":96
         }, 
         {
          "columns":0,
-         "firstgid":6,
+         "firstgid":7,
          "margin":0,
          "name":"objects",
          "properties":

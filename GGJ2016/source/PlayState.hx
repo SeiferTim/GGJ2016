@@ -10,6 +10,7 @@ import flixel.group.FlxGroup.FlxTypedGroupIterator;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
+import flixel.tile.FlxTileblock;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxArrayUtil;
@@ -42,7 +43,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{	
 		spawn = FlxPoint.get();
-		
+		add(new FlxSprite(0, 0, AssetPaths.background2__png));
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
 		platforms = new FlxTypedGroup<MovingPlatform>();
@@ -61,6 +62,10 @@ class PlayState extends FlxState
 		doorMap.set(2, d);
 		doors.push(d);
 		add(d);
+		
+		var top:FlxTileblock = new FlxTileblock(0,-16, FlxG.width, 64);
+		top.loadTiles(AssetPaths.test_tile__png, 32, 32, 0);
+		add(top);
 		
 		wiz = new Wiz();
 		wiz.x = 32;
@@ -200,15 +205,16 @@ class PlayState extends FlxState
 					wiz.casting = false;
 				
 			}
-			else if ((doors[0].alive && wiz.x + wiz.width < doors[0].x) || (doors[1].alive && wiz.x + wiz.width < doors[1].x) || (doors[2].alive && wiz.x + wiz.width < doors[2].x))
+			else if ((doors[0].alive && wiz.x + wiz.width >= doors[0].x) || (doors[1].alive && wiz.x + wiz.width >= doors[1].x) || (doors[2].alive && wiz.x + wiz.width >= doors[2].x))
 			{
-				wiz.velocity.x = 30;
-				wiz.animation.play("walking");
+				
+				wiz.velocity.x = 0;
+				wiz.animation.play("idle");
 			}
 			else
 			{
-				wiz.velocity.x = 0;
-				wiz.animation.play("idle");
+				wiz.velocity.x = 60;
+				wiz.animation.play("walking");
 			}
 			
 			

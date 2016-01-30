@@ -12,6 +12,10 @@ import flixel.util.FlxColor;
  */
 class MenuState extends FlxState
 {
+	
+	private var btnPlay:FlxButton;
+	private var btnCredits:FlxButton;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -22,6 +26,7 @@ class MenuState extends FlxState
 		title.y = 32;
 		add(title);
 		
+		/*
 		var text:FlxText = new FlxText(0, 0, 0, "Press any key to start...");
 		text.color = FlxColor.WHITE;
 		text.alignment = FlxTextAlign.CENTER;
@@ -29,6 +34,8 @@ class MenuState extends FlxState
 		text.screenCenter(FlxAxes.X);
 		text.y = FlxG.height - text.height - 32;
 		add(text);
+		*/
+		
 		
 		super.create();
 	}

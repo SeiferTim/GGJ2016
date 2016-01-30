@@ -1,7 +1,10 @@
 package;
 import flash.display.BitmapData;
+import flash.display3D.textures.RectangleTexture;
 import flash.geom.Point;
+import flixel.FlxG;
 import flixel.util.FlxColor;
+import openfl.geom.Rectangle;
 using flixel.util.FlxColor;
 
 class BitmapUtils
@@ -61,8 +64,9 @@ class BitmapUtils
 			blueArr.push( Std.int((blueVal + (255 - blueVal) / 128 * i)) );
 		}
 		
-		var coloredBMP:BitmapData = bmp; 
-		coloredBMP.paletteMap(coloredBMP, coloredBMP.rect, new Point(), redArr, greenArr, blueArr);
+		var coloredBMP:BitmapData = bmp.clone(); 
+		coloredBMP.paletteMap(coloredBMP, new Rectangle(0,0,bmp.width,bmp.height), new Point(), redArr, greenArr, blueArr);
+		
 		
 		return coloredBMP;
 	}

@@ -38,11 +38,7 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 	{
 		if (alive)
 		{
-			if (!_target.alive || !_target.exists)
-			{
-				//kill();
-				return;
-			}
+			
 			_timer -= elapsed;
 			if (_timer <= 0)
 			{
@@ -59,25 +55,33 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 				{
 					_timer = .06;
 				}
-				var r:Rainbow = recycle(Rainbow, null, false, false);
-				if (!r.alive)
+				if (_target.alive && _target.exists)
 				{
-					var cl:FlxColor;
-					switch (_style) 
+				
+					var r:Rainbow = recycle(Rainbow, null, false, false);
+					if (!r.alive)
 					{
-						case STYLE_RAINBOW:
-							cl = FlxColor.fromHSB(_hue, 1, 1);
-						case STYLE_SCARY:
-							cl = 0xff990000;
-						default:
-							cl = FlxColor.WHITE;
+						var cl:FlxColor;
+						switch (_style) 
+						{
+							case STYLE_RAINBOW:
+								cl = FlxColor.fromHSB(_hue, 1, 1);
+							case STYLE_SCARY:
+								cl = 0xff990000;
+							default:
+								cl = FlxColor.WHITE;
+						}
+						r.spawn(Std.int(cl), _target);
+						if (_style == STYLE_SCARY)
+						{
+							r.alpha = .5;
+						}
+						else
+						{
+							r.alpha = .33;
+						}
+						add(r);
 					}
-					r.spawn(Std.int(cl), _target);
-					if (_style == STYLE_SCARY)
-					{
-						r.alpha = .5;
-					}
-					add(r);
 				}
 			}
 		}
