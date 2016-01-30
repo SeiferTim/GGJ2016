@@ -181,7 +181,7 @@ class Jump extends FlxFSMState<Imp>
 	{
 		owner.animation.play("jumping", true);
 		owner.faceFrames.animation.play("jumping", true);
-		owner.velocity.y = -400;
+		owner.velocity.y = -600;
 		
 	}
 	

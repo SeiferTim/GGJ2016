@@ -1,8 +1,10 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup.FlxTypedGroupIterator;
 import flixel.system.FlxAssets;
@@ -12,6 +14,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxArrayUtil;
 import haxe.ds.IntMap;
 import haxe.Json;
+import lime.project.Platform;
 import openfl.Assets;
 using StringTools;
 
@@ -22,6 +25,7 @@ class PlayState extends FlxState
 {
 	private var walls:FlxTypedGroup<FlxTilemap>;
 	private var entities:FlxTypedGroup<GameObject>;
+	private var platforms:FlxTypedGroup<MovingPlatform>;
 	private var wiz:Wiz;
 	private var p:Imp;
 	private var s:Spell;
@@ -35,6 +39,7 @@ class PlayState extends FlxState
 		
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
+		platforms = new FlxTypedGroup<MovingPlatform>();
 		objMap = new IntMap<GameObject>();
 		
 		wiz = new Wiz();
@@ -52,7 +57,13 @@ class PlayState extends FlxState
 			if (n.name == "walls")
 			{
 				var t:FlxTilemap = new FlxTilemap();
-				t.loadMapFromArray(n.data, 40, 19, AssetPaths.test_tile__png , 32, 32, null, 0, 0, 1);
+				var a:Array<Int> = n.data;
+				for (i in 0...a.length)
+				{
+					a[i]--;
+				}
+				
+				t.loadMapFromArray(a, 40, 19, AssetPaths.test_tile__png , 32, 32, null, 0, 0, 0);
 				t.y += 112;
 				walls.add(t);
 			}
@@ -60,15 +71,46 @@ class PlayState extends FlxState
 			{
 				for (o in cast(n.objects, Array<Dynamic>))
 				{
-					var properties:{ triggers:String } = o.properties;
+					var properties:{ triggers:String, size:String, xdist:String, ydist:String, xspeed:String, yspeed:String } = o.properties;
 					var trig:Int = -1;
 					if (properties.triggers != null)
 						trig = Std.parseInt(properties.triggers);
-					var ob:GameObject = createEntity(o.type, o.id, trig);
-					ob.x = o.x;
-					ob.y = o.y+80;
-					objMap.set(o.id, ob);
-					entities.add(ob);
+					
+					if (o.type == "platform")
+					{
+						var size:Int = 0;
+						var xdist:Int = 0;
+						var ydist:Int = 0;
+						var xspeed:Int = 0;
+						var yspeed:Int = 0;
+						if (properties.size != null)
+							size = Std.parseInt(properties.size);
+						if (properties.xdist != null)
+							xdist = Std.parseInt(properties.xdist);
+						if (properties.ydist != null)
+							ydist = Std.parseInt(properties.ydist);
+						if (properties.xspeed != null)
+							xspeed = Std.parseInt(properties.xspeed);
+						if (properties.yspeed != null)
+							yspeed = Std.parseInt(properties.yspeed);
+						var p:MovingPlatform = new MovingPlatform(o.x, o.y+80, size, xdist, ydist, xspeed, yspeed);
+						p.objid = o.id;
+						platforms.add(p);
+						
+					}
+					else
+					{
+						var ob:GameObject = createEntity(o.type, o.id, trig); // , size, xdist, ydist, xspeed, yspeed);
+						if (ob != null)	
+						{
+							ob.angle = o.rotation;
+							ob.x = o.x;
+							ob.y = o.y+80;
+							objMap.set(o.id, ob);
+							entities.add(ob);
+						}
+					}
+					
 				}
 			}
 		}
@@ -78,55 +120,7 @@ class PlayState extends FlxState
 		p.y = 122 + (32 * 2);
 		entities.add(p);
 		
-		/*
-		
-		
-		
-		
-		
-		
-		
-		
-		var regex:EReg = new EReg("[ \t]*((\r\n)|\r|\n)[ \t]*", "g");
-		var lines:Array<String> = regex.split(Assets.getText(AssetPaths.blank_map_objects__csv));
-		var rows:Array<String> = lines.filter(function(line) return line != "");
-		var row:Int = 0;
-		var columns:Array<String>;
-		while (row < t.heightInTiles)
-		{
-			var rowString = rows[row];
-			if (rowString.endsWith(","))
-				rowString = rowString.substr(0, rowString.length - 1);
-			columns = rowString.split(",");
-			
-			var column = 0;
-			while (column < t.widthInTiles)
-			{
-				var columnString = columns[column];
-				
-				var curTile = Std.parseInt(columnString);
-				if (curTile > -1)
-				{
-					var e:GameObject = createEntity(curTile);
-					if (e!=null)
-					{
-						entities.add(e);
-						e.x = column * 32;
-						e.y = t.y + (row * 32);
-					}
-				}
-				column++;
-			}
-			
-			row++;
-		}
-		
-		
-		
-		
-		
-		*/
-		
+		add(platforms);
 		add(walls);
 		
 		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
@@ -135,7 +129,7 @@ class PlayState extends FlxState
 		super.create();
 	}
 	
-	public function createEntity(ObjType:String, Id:Int, Triggers:Int=-1):GameObject
+	public function createEntity(ObjType:String, Id:Int, Triggers:Int=-1, ?Size:Int = 0, ?XDist:Int =0, ?YDist:Int =0, ?XSpeed:Int =0, ?YSpeed:Int = 0):GameObject
 	{
 		var o:GameObject;
 		switch (ObjType)
@@ -149,7 +143,7 @@ class PlayState extends FlxState
 			default:
 				return null;
 		}
-		o.id = Id;
+		o.objid = Id;
 		o.triggers = Triggers;
 		return o;
 	}
@@ -179,6 +173,7 @@ class PlayState extends FlxState
 			s.alpha -= elapsed* 5;
 		
 		FlxG.collide(walls, entities);
+		FlxG.overlap(platforms, entities, null, checkPlatformCollision);
 		FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		super.update(elapsed);
 	}
@@ -213,6 +208,16 @@ class PlayState extends FlxState
 						cast(ObjA, Button).pressed = true;
 				}
 		}
+	}
+	
+	private function checkPlatformCollision(Plat:MovingPlatform, Obj:GameObject):Bool
+	{
+		if (Obj.alive && Obj.exists && Plat.alive && Plat.exists)
+		{
+			if (Obj.objType == Reg.OBJ_IMP)
+				return FlxObject.separate(Plat, Obj);
+		}
+		return false;
 	}
 	
 	public function checkOverlappedEntities(ObjA:GameObject, ObjB:GameObject):Bool
