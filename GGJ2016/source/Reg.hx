@@ -17,6 +17,7 @@ class Reg
 	public static inline var OBJ_IMP:Int = -1;
 	public static inline var OBJ_SPIKES:Int = 0;
 	public static inline var OBJ_BUTTON:Int = 1;
+	public static inline var OBJ_SIGIL:Int = 2;
 	
 	
 	public static var gamepad:FlxGamepad = null;
