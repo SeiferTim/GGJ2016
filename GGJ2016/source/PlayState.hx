@@ -9,7 +9,9 @@ import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
+import flixel.util.FlxArrayUtil;
 import openfl.Assets;
+using StringTools;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -31,7 +33,7 @@ class PlayState extends FlxState
 		entities = new FlxTypedGroup<FlxSprite>();
 		
 		var t:FlxTilemap = new FlxTilemap();
-		t.loadMapFromCSV(Assets.getText(AssetPaths.blank_map__csv), AssetPaths.test_tile__png, 32, 32, null, 0, 0, 1);
+		t.loadMapFromCSV(Assets.getText(AssetPaths.blank_map_walls__csv), AssetPaths.test_tile__png, 32, 32, null, 0, 0, 1);
 		t.y += 112;
 		walls.add(t);
 		
@@ -44,6 +46,41 @@ class PlayState extends FlxState
 		wiz.y = 112 - 32;
 		add(wiz);
 		
+		var regex:EReg = new EReg("[ \t]*((\r\n)|\r|\n)[ \t]*", "g");
+		var lines:Array<String> = regex.split(Assets.getText(AssetPaths.blank_map_objects__csv));
+		var rows:Array<String> = lines.filter(function(line) return line != "");
+		var row:Int = 0;
+		var columns:Array<String>;
+		while (row < t.heightInTiles)
+		{
+			var rowString = rows[row];
+			if (rowString.endsWith(","))
+				rowString = rowString.substr(0, rowString.length - 1);
+			columns = rowString.split(",");
+			
+			var column = 0;
+			while (column < t.widthInTiles)
+			{
+				var columnString = columns[column];
+				
+				var curTile = Std.parseInt(columnString);
+				if (curTile > -1)
+				{
+					var e:FlxSprite = createEntity(curTile);
+					if (e!=null)
+					{
+						entities.add(e);
+						e.x = column * 32;
+						e.y = t.y + (row * 32);
+					}
+				}
+				column++;
+			}
+			
+			row++;
+		}
+		
+		
 		entities.add(p);
 		
 		add(walls);
@@ -54,6 +91,16 @@ class PlayState extends FlxState
 		
 		
 		super.create();
+	}
+	
+	public function createEntity(EntityID:Int):FlxSprite
+	{
+		switch (EntityID)
+		{
+			case 0:
+				return new Spikes();
+		}
+		return null;
 	}
 	
 	/**

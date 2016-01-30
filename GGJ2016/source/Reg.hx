@@ -14,6 +14,11 @@ import flixel.input.gamepad.FlxGamepadInputID;
 class Reg
 {
 	
+	public static inline var OBJ_IMP:Int = -1;
+	public static inline var OBJ_SPIKES:Int = 0;
+	public static inline var OBJ_BUTTON:Int = 1;
+	
+	
 	public static var gamepad:FlxGamepad = null;
 	
 	public static inline var KEYS_LEFT:Int = 0; // :Array<FlxKey> = [A, LEFT];

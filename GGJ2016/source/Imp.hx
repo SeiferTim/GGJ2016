@@ -19,9 +19,10 @@ import flixel.util.FlxDestroyUtil;
 import openfl.display.BitmapData;
 using BitmapUtils;
 
-class Imp extends FlxSprite
+class Imp extends FlxSprite implements IGameObject
 {
 
+	public var objType(default, null):Int;
 	public static inline var GRAVITY:Float = 1600;
 	private var fsm:FlxFSM<Imp>;
 	private var originalFrames:BitmapData;
@@ -31,6 +32,7 @@ class Imp extends FlxSprite
 	public function new()
 	{
 		super();
+		objType = Reg.OBJ_IMP;
 		loadGraphic(AssetPaths.imp_grey__png, true, 32, 32);
 		animation.add("standing", [0, 1, 2], 12, true);
 		animation.add("jumping", [2], 12, true);

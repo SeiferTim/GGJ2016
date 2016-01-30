@@ -9,12 +9,13 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
  */
 class Button extends FlxSprite
 {
-
+	public var objType(default, null):Int;
 	public var pressed(default, set):Bool = false;
 	
 	public function new() 
 	{
 		super();
+		objType = Reg.OBJ_BUTTON;
 		loadGraphic(AssetPaths.Button__png, true, 32, 32);
 		moves = false;
 		immovable = true;
