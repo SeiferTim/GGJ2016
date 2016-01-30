@@ -146,6 +146,8 @@ class PlayState extends FlxState
 		var o:GameObject;
 		switch (ObjType)
 		{
+			case "sigil":
+				o = cast new Sigil(Triggers);
 			case "spikes":
 				o = cast new Spikes();
 				
@@ -206,6 +208,9 @@ class PlayState extends FlxState
 						playerHitsSpikes();
 					case Reg.OBJ_BUTTON:
 						cast(ObjB, Button).pressed = true;
+					case Reg.OBJ_SIGIL:
+						cast(ObjB, Sigil).collected = true;
+						
 				}
 			case Reg.OBJ_SPIKES:
 				switch (ObjB.objType)
@@ -218,6 +223,12 @@ class PlayState extends FlxState
 				{
 					case Reg.OBJ_IMP:
 						cast(ObjA, Button).pressed = true;
+				}
+			case Reg.OBJ_SIGIL:
+				switch (ObjB.objType)
+				{
+					case Reg.OBJ_IMP:
+						cast(ObjA, Sigil).collected = true;
 				}
 		}
 	}
@@ -256,6 +267,15 @@ class PlayState extends FlxState
 		if (o != null)
 		{
 			o.triggered = false;
+		}
+	}
+	
+	public function openDoor(ObjID:Int):Void
+	{
+		var o:Door = doorMap.get(ObjID);
+		if (o != null)
+		{
+			o.open();
 		}
 	}
 }

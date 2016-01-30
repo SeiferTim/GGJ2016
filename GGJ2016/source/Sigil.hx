@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
@@ -22,9 +23,9 @@ class Sigil extends GameObject
 		moves = false;
 		immovable = true;
 		
-		animation.add("Sigil1", [0], 12, true);
-		animation.add("Sigil2", [1], 12, true);
-		animation.add("Sigil3", [2], 12, true);
+		animation.add("Sigil0", [0], 12, true);
+		animation.add("Sigil1", [1], 12, true);
+		animation.add("Sigil2", [2], 12, true);
 		animation.play("Sigil" + Std.string(doorNo));
 	}
 	
@@ -40,7 +41,7 @@ class Sigil extends GameObject
 			kill();
 			if (triggers != -1)
 			{
-				cast (FlxG.state, PlayState).openDoor(doorNo);
+				cast (FlxG.state, PlayState).openDoor(triggers);
 			}
 		}
 			
