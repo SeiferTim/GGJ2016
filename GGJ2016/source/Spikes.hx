@@ -7,7 +7,7 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
  * ...
  * @author ...
  */
-class Spikes extends FlxSprite
+class Spikes extends FlxSprite implements IGameObject
 {
 	public var objType(default, null):Int;
 	public function new() 
