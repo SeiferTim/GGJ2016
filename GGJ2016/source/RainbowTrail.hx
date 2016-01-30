@@ -40,7 +40,7 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 		{
 			if (!_target.alive || !_target.exists)
 			{
-				kill();
+				//kill();
 				return;
 			}
 			_timer -= elapsed;

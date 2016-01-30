@@ -7,6 +7,7 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup.FlxTypedGroupIterator;
+import flixel.math.FlxPoint;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
@@ -31,12 +32,16 @@ class PlayState extends FlxState
 	private var s:Spell;
 	private var objMap:IntMap<GameObject>;
 	private var doorMap:IntMap<Door>;
+	private var doors:Array<Door> = [];
+	private var castTimer:Float = 0;
+	private var spawn:FlxPoint;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{	
+		spawn = FlxPoint.get();
 		
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
@@ -46,12 +51,15 @@ class PlayState extends FlxState
 		
 		var d:Door = new Door(350-16, 32+16, 0);
 		doorMap.set(0, d);
+		doors.push(d);
 		add(d);
 		d = new Door(640 - 16, 32+16, 1);
 		doorMap.set(1, d);
+		doors.push(d);
 		add(d);
 		d = new Door(950-16, 32+16, 2);
 		doorMap.set(2, d);
+		doors.push(d);
 		add(d);
 		
 		wiz = new Wiz();
@@ -88,7 +96,12 @@ class PlayState extends FlxState
 					if (properties.triggers != null)
 						trig = Std.parseInt(properties.triggers);
 					
-					if (o.type == "platform")
+					if (o.type == "spawn")
+					{
+						spawn.x = o.x;
+						spawn.y = o.y+80;
+					}
+					else if (o.type == "platform")
 					{
 						var size:Int = 0;
 						var xdist:Int = 0;
@@ -130,6 +143,7 @@ class PlayState extends FlxState
 		p = new Imp();
 		p.x = 32 * 2;
 		p.y = 122 + (32 * 2);
+		p.kill();
 		entities.add(p);
 		
 		add(platforms);
@@ -174,16 +188,50 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		if (wiz.casting)
+		if (p.alive)
 		{
-			s.x = wiz.x;
-			s.y = wiz.y;
-			if (s.alpha < 1)
-				s.alpha += elapsed*5;
+			if (wiz.casting)
+			{
+				if (s.alpha > 0)
+					s.alpha -= elapsed * 5;
+				else
+					wiz.casting = false;
+				
+			}
+			else if ((doors[0].alive && wiz.x + wiz.width < doors[0].x) || (doors[1].alive && wiz.x + wiz.width < doors[1].x) || (doors[2].alive && wiz.x + wiz.width < doors[2].x))
+			{
+				wiz.velocity.x = 30;
+				wiz.animation.play("walking");
+			}
+			else
+			{
+				wiz.velocity.x = 0;
+				wiz.animation.play("idle");
+			}
+			
+			
+			
 		}
-		else if (s.alpha > 0)
-			s.alpha -= elapsed* 5;
-		
+		else 
+		{
+			if (wiz.casting)
+			{
+				s.x = wiz.x;
+				s.y = wiz.y;
+				if (s.alpha < 1)
+					s.alpha += elapsed * 5;
+				castTimer -= elapsed;
+				if (castTimer <= 0)
+					p.reset(spawn.x, spawn.y);
+			}
+			else 
+			{
+				wiz.velocity.x = 0;
+				wiz.casting = true;
+				wiz.animation.play("cast");
+				castTimer = 1;
+			}
+		}
 		FlxG.collide(walls, entities);
 		FlxG.overlap(platforms, entities, null, checkPlatformCollision);
 		FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);

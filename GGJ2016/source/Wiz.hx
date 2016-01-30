@@ -13,9 +13,8 @@ class Wiz extends FlxSprite
 		animation.add("idle", [0], 12, true);
 		animation.add("walking", [1, 2], 12, true);
 		animation.add("cast", [3], 12, true);
-		animation.play("cast");
-		casting = true;
-		velocity.x = 10;
+		animation.play("idle");
+		
 		
 	}
 	
