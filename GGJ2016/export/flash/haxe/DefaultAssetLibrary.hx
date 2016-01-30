@@ -61,6 +61,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__assets_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__assets_fonts_monsterrat_ttf);
 		
@@ -81,6 +82,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/images/imp_grey.png", AssetType.IMAGE);
 		className.set ("assets/images/test_tile.png", __ASSET__assets_images_test_tile_png);
 		type.set ("assets/images/test_tile.png", AssetType.IMAGE);
+		className.set ("assets/images/Wizard.png", __ASSET__assets_images_wizard_png);
+		type.set ("assets/images/Wizard.png", AssetType.IMAGE);
 		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
 		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
@@ -121,6 +124,10 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		type.set (id, AssetType.IMAGE);
 		id = "assets/images/test_tile.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Wizard.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
@@ -187,6 +194,9 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("assets/images/test_tile.png", __ASSET__assets_images_test_tile_png);
 		type.set ("assets/images/test_tile.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/Wizard.png", __ASSET__assets_images_wizard_png);
+		type.set ("assets/images/Wizard.png", AssetType.IMAGE);
 		
 		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
@@ -858,6 +868,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep @:bind #if display private #end class __ASSET__assets_images_imp_color_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_imp_grey_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_test_tile_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_wizard_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_music_music_goes_here_txt extends flash.utils.ByteArray { }
 @:keep @:bind #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends flash.utils.ByteArray { }
 @:keep @:bind #if display private #end class __ASSET__assets_sounds_beep_mp3 extends flash.media.Sound { }
@@ -868,6 +879,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 #elseif html5
+
 
 
 
@@ -897,6 +909,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:image("assets/images/imp_color.png") #if display private #end class __ASSET__assets_images_imp_color_png extends lime.graphics.Image {}
 @:image("assets/images/imp_grey.png") #if display private #end class __ASSET__assets_images_imp_grey_png extends lime.graphics.Image {}
 @:image("assets/images/test_tile.png") #if display private #end class __ASSET__assets_images_test_tile_png extends lime.graphics.Image {}
+@:image("assets/images/Wizard.png") #if display private #end class __ASSET__assets_images_wizard_png extends lime.graphics.Image {}
 @:file("assets/music/music-goes-here.txt") #if display private #end class __ASSET__assets_music_music_goes_here_txt extends lime.utils.Bytes {}
 @:file("assets/sounds/sounds-go-here.txt") #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends lime.utils.Bytes {}
 @:file("C:/HaxeToolkit/haxe/lib/flixel/git/assets/sounds/beep.mp3") #if display private #end class __ASSET__assets_sounds_beep_mp3 extends lime.utils.Bytes {}

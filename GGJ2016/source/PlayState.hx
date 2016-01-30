@@ -18,6 +18,7 @@ class PlayState extends FlxState
 {
 	private var walls:FlxTypedGroup<FlxTilemap>;
 	private var entities:FlxTypedGroup<FlxSprite>;
+	private var wiz:Wiz;
 
 	
 	/**
@@ -37,10 +38,20 @@ class PlayState extends FlxState
 		var p:Imp = new Imp();
 		p.x = 32 * 2;
 		p.y = 122 + (32 * 2);
+		
+		wiz = new Wiz();
+		wiz.x = 32;
+		wiz.y = 112 - 32;
+		add(wiz);
+		
 		entities.add(p);
 		
 		add(walls);
+		
+		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
+		add(r);
 		add(entities);
+		
 		
 		super.create();
 	}

@@ -116,6 +116,8 @@ class Imp extends FlxSprite
 	{
 		fsm.destroy();
 		fsm = null;
+		faceFrames.destroy();
+		faceFrames = null;
 		super.destroy();
 	}
 	
@@ -155,6 +157,10 @@ class Idle extends FlxFSMState<Imp>
 			owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
 			owner.animation.play("jumping");
 			owner.faceFrames.animation.play("jumping");
+			if ((owner.velocity.x > 0 && left) || (owner.velocity.x < 0 && right))
+			{
+				owner.velocity.x = 0;
+			}
 			owner.acceleration.x = left ? -300 : 300;
 		}
 		else
@@ -186,6 +192,10 @@ class Jump extends FlxFSMState<Imp>
 		{
 			owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
 			owner.acceleration.x = left ? -300 : 300;
+			if ((owner.acceleration.x > 0 && left) || (owner.acceleration.x < 0 && right))
+			{
+				owner.velocity.x = 0;
+			}
 		}
 		else
 		{
