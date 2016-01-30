@@ -5,6 +5,8 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxAxes;
+import flixel.util.FlxColor;
 /**
  * A FlxState which can be used for the game's menu.
  */
@@ -15,6 +17,19 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		var title:FlxSprite = new FlxSprite(0, 0, AssetPaths.Logo__png);
+		title.screenCenter(FlxAxes.X);
+		title.y = 32;
+		add(title);
+		
+		var text:FlxText = new FlxText(0, 0, 0, "Press any key to start...");
+		text.color = FlxColor.WHITE;
+		text.alignment = FlxTextAlign.CENTER;
+		text.size = 32;
+		text.screenCenter(FlxAxes.X);
+		text.y = FlxG.height - text.height - 32;
+		add(text);
+		
 		super.create();
 	}
 	
@@ -32,6 +47,9 @@ class MenuState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
+		if (Reg.checkKeyPress(Reg.KEYS_JUMP)) {
+			FlxG.switchState(new PlayState());
+		}
 		super.update(elapsed);
 	}	
 }
