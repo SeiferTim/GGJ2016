@@ -19,9 +19,10 @@ using StringTools;
 class PlayState extends FlxState
 {
 	private var walls:FlxTypedGroup<FlxTilemap>;
-	private var entities:FlxTypedGroup<FlxSprite>;
+	private var entities:FlxTypedGroup<GameObject>;
 	private var wiz:Wiz;
-
+	private var p:Imp;
+	private var s:Spell;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -30,14 +31,14 @@ class PlayState extends FlxState
 	{	
 		
 		walls  = new FlxTypedGroup<FlxTilemap>();
-		entities = new FlxTypedGroup<FlxSprite>();
+		entities = new FlxTypedGroup<GameObject>();
 		
 		var t:FlxTilemap = new FlxTilemap();
 		t.loadMapFromCSV(Assets.getText(AssetPaths.blank_map_walls__csv), AssetPaths.test_tile__png, 32, 32, null, 0, 0, 1);
 		t.y += 112;
 		walls.add(t);
 		
-		var p:Imp = new Imp();
+		p = new Imp();
 		p.x = 32 * 2;
 		p.y = 122 + (32 * 2);
 		
@@ -45,6 +46,10 @@ class PlayState extends FlxState
 		wiz.x = 32;
 		wiz.y = 112 - 32;
 		add(wiz);
+		
+		s = new Spell();
+		s.alpha = 0;
+		add(s);
 		
 		var regex:EReg = new EReg("[ \t]*((\r\n)|\r|\n)[ \t]*", "g");
 		var lines:Array<String> = regex.split(Assets.getText(AssetPaths.blank_map_objects__csv));
@@ -66,7 +71,7 @@ class PlayState extends FlxState
 				var curTile = Std.parseInt(columnString);
 				if (curTile > -1)
 				{
-					var e:FlxSprite = createEntity(curTile);
+					var e:GameObject = createEntity(curTile);
 					if (e!=null)
 					{
 						entities.add(e);
@@ -93,12 +98,14 @@ class PlayState extends FlxState
 		super.create();
 	}
 	
-	public function createEntity(EntityID:Int):FlxSprite
+	public function createEntity(EntityID:Int):GameObject
 	{
 		switch (EntityID)
 		{
 			case 0:
-				return new Spikes();
+				return cast new Spikes();
+			case 1:
+				return cast new Button();
 		}
 		return null;
 	}
@@ -117,7 +124,59 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
+		if (wiz.casting)
+		{
+			s.x = wiz.x;
+			s.y = wiz.y;
+			if (s.alpha < 1)
+				s.alpha += elapsed*5;
+		}
+		else if (s.alpha > 0)
+			s.alpha -= elapsed* 5;
+		
 		FlxG.collide(walls, entities);
+		FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		super.update(elapsed);
-	}	
+	}
+	
+	public function playerHitsSpikes():Void
+	{
+		p.kill();
+	}
+	
+	public function overlappedEntities(ObjA:GameObject, ObjB:GameObject):Void
+	{
+		switch (ObjA.objType)
+		{
+			case Reg.OBJ_IMP:
+				switch (ObjB.objType)
+				{
+					case Reg.OBJ_SPIKES:
+						playerHitsSpikes();
+					case Reg.OBJ_BUTTON:
+						cast(ObjB, Button).pressed = true;
+				}
+			case Reg.OBJ_SPIKES:
+				switch (ObjB.objType)
+				{
+					case Reg.OBJ_IMP:
+						playerHitsSpikes();
+				}
+			case Reg.OBJ_BUTTON:
+				switch (ObjB.objType)
+				{
+					case Reg.OBJ_IMP:
+						cast(ObjA, Button).pressed = true;
+				}
+		}
+	}
+	
+	public function checkOverlappedEntities(ObjA:GameObject, ObjB:GameObject):Bool
+	{
+		if (ObjA.alive && ObjA.exists && ObjB.alive && ObjB.exists)
+		{
+			return true;
+		}
+		return false;
+	}
 }

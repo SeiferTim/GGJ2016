@@ -19,13 +19,13 @@ import flixel.util.FlxDestroyUtil;
 import openfl.display.BitmapData;
 using BitmapUtils;
 
-class Imp extends FlxSprite implements IGameObject
+class Imp extends GameObject
 {
 
-	public var objType(default, null):Int;
+	
 	public static inline var GRAVITY:Float = 1600;
 	private var fsm:FlxFSM<Imp>;
-	private var originalFrames:BitmapData;
+	
 	private var hue:Float = 0;
 	public var faceFrames:FlxSprite;
 	

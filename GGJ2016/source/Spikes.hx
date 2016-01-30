@@ -3,13 +3,9 @@ package;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
-/**
- * ...
- * @author ...
- */
-class Spikes extends FlxSprite
+class Spikes extends GameObject
 {
-	public var objType(default, null):Int;
+	
 	public function new() 
 	{
 		super();

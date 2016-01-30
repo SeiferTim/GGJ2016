@@ -1,15 +1,12 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
-/**
- * ...
- * @author ...
- */
-class Button extends FlxSprite
+class Button extends GameObject
 {
-	public var objType(default, null):Int;
+	
 	public var pressed(default, set):Bool = false;
 	
 	public function new() 
@@ -23,6 +20,7 @@ class Button extends FlxSprite
 		animation.add("unpressed", [0], 12, true);
 		animation.add("pressed", [1], 12, true);
 		animation.play("unpressed", true);
+		FlxG.watch.add(this, "pressed");
 		
 	}
 	
@@ -36,6 +34,15 @@ class Button extends FlxSprite
 			animation.play("unpressed");
 			
 		return pressed;
+	}
+	
+	
+	override public function update(elapsed:Float):Void 
+	{
+		
+		//if (pressed)
+		//	pressed = false;
+		super.update(elapsed);
 	}
 	
 }
