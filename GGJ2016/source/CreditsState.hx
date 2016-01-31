@@ -2,9 +2,11 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.ui.FlxButton;
+import flixel.util.FlxDestroyUtil;
 
 /**
  * ...
@@ -15,6 +17,7 @@ class CreditsState extends FlxState
 
 	private var btnPlay:FlxButton;
 	private var btnCredits:FlxButton;
+	private var buttonSound:FlxSound;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -96,7 +99,7 @@ class CreditsState extends FlxState
 		add(musicCrew);
 		
 		var musicTitle:FlxText = new FlxText(leftMargin, (verticalSpace+=50), width); // x, y, width
-		musicTitle.text = "Resident Jévion";
+		musicTitle.text = "Resident FlyGuy";
 		musicTitle.color = FlxColor.WHITE;
 		musicTitle.size = 20;
 		musicTitle.alignment = "center";
@@ -116,22 +119,37 @@ class CreditsState extends FlxState
 		musicCrew.alignment = "center";
 		add(musicCrew);
 		
+		buttonSound = FlxG.sound.load(AssetPaths.Boop__wav);
+		
 		var backButton:FlxButton = new FlxButton(550, (verticalSpace+=40), "Back to Menu", OnClickBackButton);
 		backButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
+		//backButton.onUp.callback = OnButtonUp;
 		add(backButton);
 
 		
 		super.create();
 	}
 	
-	override public function destroy():Void
-	{
-		super.destroy();
+	/*
+	function OnButtonUp():Void {
+		
+		buttonSound.play(true);		
 	}
+	*/
 	
 	function OnClickBackButton():Void
     {
+		
         FlxG.switchState(new MenuState());
     }
+	
+	
+	override public function destroy():Void
+	{
+		buttonSound = FlxDestroyUtil.destroy(buttonSound);
+		super.destroy();
+	}
+	
+	
 	
 }

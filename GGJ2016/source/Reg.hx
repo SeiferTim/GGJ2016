@@ -19,6 +19,26 @@ class Reg
 	public static inline var OBJ_BUTTON:Int = 1;
 	public static inline var OBJ_SIGIL:Int = 2;
 	
+	public static inline var MUS_MENU:Int = 0;
+	public static inline var MUS_PLAY:Int = 1;
+	
+	public static var cur_music:Int = -1;
+	
+	public static function playMusic(newSong:Int):Void {
+		
+		if (newSong != cur_music) {
+			
+			switch (newSong) {
+				case MUS_MENU:
+					FlxG.sound.playMusic(AssetPaths.GameJam3Louder__mp3, 1, true);
+				case MUS_PLAY:
+					FlxG.sound.playMusic(AssetPaths.GameJam1LOUDER__mp3, 1, true);
+			}
+			
+			cur_music = newSong;
+		}
+		
+	}
 	
 	public static var gamepad:FlxGamepad = null;
 	

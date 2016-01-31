@@ -57,7 +57,7 @@
                     {
                      "size":"4",
                      "xdist":"25",
-                     "xspeed":"70"
+                     "xspeed":"80"
                     },
                  "rotation":0,
                  "type":"platform",
@@ -550,7 +550,7 @@
                  "image":"..\/images\/SpawnCircle.png"
                 }
             },
-         "tilewidth":96
+         "tilewidth":128
         }, 
         {
          "columns":0,

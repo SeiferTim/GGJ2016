@@ -22,6 +22,8 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		Reg.playMusic(1);
+		
 		add(new FlxSprite(0, 0, AssetPaths.menu_pack__png));
 		var s:StarEmitter = new StarEmitter();
 		add(s);
@@ -45,12 +47,15 @@ class MenuState extends FlxState
 		startButton.label.size = 20;
 		startButton.x = (FlxG.width / 4) - (startButton.width/2);
 		startButton.y = 360;
+		//startButton.onUp.sound = FlxG.sound.load(AssetPaths.Boop__wav);
 		add(startButton);
+		
 		var creditsButton:FlxButton = new FlxButton(0, 0, "Credits", OnClickCreditsButton);
 		creditsButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
 		creditsButton.label.size = 20;
 		creditsButton.x = (FlxG.width / 4) - (startButton.width / 2);
 		creditsButton.y = 360 +  startButton.height + 20;
+		//creditsButton.onUp.sound = FlxG.sound.load(AssetPaths.Boop__wav);
 		add(creditsButton);
 		
 		/*

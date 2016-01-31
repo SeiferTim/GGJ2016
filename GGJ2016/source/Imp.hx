@@ -13,6 +13,7 @@ import flixel.graphics.frames.FlxTileFrames;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.addons.util.FlxFSM;
 import flixel.util.FlxDestroyUtil;
@@ -29,11 +30,11 @@ class Imp extends GameObject
 	private var hue:Float = 0;
 	public var faceFrames:FlxSprite;
 	
+	
 	public function new()
 	{
 		
 		super();
-		
 		
 		objType = Reg.OBJ_IMP;
 		loadGraphic(AssetPaths.Full_Grey__png , true, 32, 32);
@@ -47,7 +48,7 @@ class Imp extends GameObject
 		height = 28;
 		offset.x = 2;
 		offset.y = 4;
-		
+			
 		
 		faceFrames = new FlxSprite();
 		faceFrames.loadGraphic(AssetPaths.Full_Color__png, true, 32, 32);
@@ -210,8 +211,13 @@ class Idle extends FlxFSMState<Imp>
 
 class Jump extends FlxFSMState<Imp>
 {
+	private var impJump:FlxSound;
+	
+	
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		impJump = FlxG.sound.load(AssetPaths.ViolinSlideUPM__wav);
+		impJump.play();
 		owner.animation.play("jumping");
 		//owner.faceFrames.animation.play("jumping");
 		owner.velocity.y = -600;

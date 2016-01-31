@@ -253,8 +253,12 @@ class PlayState extends FlxState
 		
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
-			monNoise.play();
+<<<<<<< HEAD
 			openSubState(new GameOverSubState(returnFromSubState));
+=======
+			monNoise.play();
+			openSubState(new GameOverSubState());
+>>>>>>> 5e65e7f4b4a48d7dcbd464f3d69a961155cfb2df
 		}
 		else
 		{
