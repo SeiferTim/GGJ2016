@@ -62,7 +62,7 @@ class PlayState extends FlxState
 		monNoise = FlxG.sound.load(AssetPaths.cccreeepy__wav);
 		
 		spawn = FlxPoint.get();
-		add(new FlxSprite(0, 0, AssetPaths.background__png));
+		add(new FlxSprite(0, 0, AssetPaths.BACKGROUNDWORKTC__png));
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
 		platforms = new FlxTypedGroup<MovingPlatform>();
@@ -265,8 +265,11 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		
-		if (monster.x + (monster.width / 2) >= wiz.x)
+		if (wiz.x >= FlxG.width)
+		{
+			openSubState(new GameWinSubState(returnFromSubState));
+		}
+		else if (monster.x + (monster.width / 2) >= wiz.x)
 		{
 			monNoise.play();
 
@@ -275,6 +278,10 @@ class PlayState extends FlxState
 		}
 		else
 		{
+			if ((wiz.x - monster.x) + monster.width < 200)
+			{
+				FlxG.camera.shake(0.01 * (1 - (((wiz.x - monster.x) + monster.width) / 200)) , elapsed * 2);
+			}
 			if (p.alive)
 			{
 				if (wiz.casting)
@@ -312,6 +319,8 @@ class PlayState extends FlxState
 					castTimer -= elapsed;
 					if (castTimer <= 0) {
 						p.reset(spawn.x, spawn.y);
+//						p.alpha = 0;
+						death.spawn(spawn.x+16, spawn.y+16);
 						impSpawn.play();	
 					}
 				}
