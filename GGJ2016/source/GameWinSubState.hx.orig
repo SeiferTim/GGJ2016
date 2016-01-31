@@ -4,7 +4,10 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+<<<<<<< HEAD
 import flixel.group.FlxGroup.FlxTypedGroup;
+=======
+>>>>>>> 4c68477d08703fa88b38e68457f97fbcc1088d0e
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -40,9 +43,7 @@ class GameWinSubState extends FlxSubState
 	
 	override public function create():Void 
 	{
-		FlxG.sound.music.stop();
-		winSound = FlxG.sound.load(AssetPaths.LickyLicky__wav);
-		winSound.play();
+<<<<<<< HEAD
 		
 		impSpawn = FlxG.sound.load(AssetPaths.GiggleFX__wav);
 		back = new FlxSprite();
@@ -56,6 +57,11 @@ class GameWinSubState extends FlxSubState
 		impRain = new FlxTypedGroup<RainbowTrail>(5);
 		add(impRain);
 		add(imps);
+=======
+		FlxG.sound.music.stop();
+		winSound = FlxG.sound.load(AssetPaths.LickyLicky__wav);
+		winSound.play();
+>>>>>>> 4c68477d08703fa88b38e68457f97fbcc1088d0e
 		
 		text = new FlxText();
 		text.text = "VICTORY!";
