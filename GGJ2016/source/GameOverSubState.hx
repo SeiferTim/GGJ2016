@@ -62,7 +62,7 @@ class GameOverSubState extends FlxSubState
 		
 		text = new FlxText();
 		text.text = "GAME OVER!";
-		text.size = 72;
+		text.size = 130;
 		text.font = AssetPaths.LemonMilk__otf;
 		text.color = FlxColor.WHITE;
 		text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 10);

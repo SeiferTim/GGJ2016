@@ -110,6 +110,14 @@ class Imp extends GameObject
 			hue--;
 		dirty = true;
 		fsm.update(elapsed);
+		if (!isReal)
+		{
+			
+			if (velocity.y > 0 && y > FlxG.height)
+			{
+				kill();
+			}
+		}
 		super.update(elapsed);
 	}
 	

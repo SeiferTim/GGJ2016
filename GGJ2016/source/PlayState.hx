@@ -85,7 +85,7 @@ class PlayState extends FlxState
 		add(d);
 		
 		var top:FlxTileblock = new FlxTileblock(0,-16, FlxG.width, 64);
-		top.loadTiles(AssetPaths.test_tile__png, 32, 32, 0);
+		top.loadTiles(AssetPaths.TILEBROWN__png, 32, 32, 0);
 		add(top);
 		
 		wiz = new Wiz();
@@ -109,7 +109,7 @@ class PlayState extends FlxState
 					a[i]--;
 				}
 				
-				t.loadMapFromArray(a, 40, 19, AssetPaths.test_tile__png , 32, 32, null, 0, 0, 0);
+				t.loadMapFromArray(a, 40, 19, AssetPaths.TILEBROWN__png , 32, 32, null, 0, 0, 0);
 				t.y += 112;
 				walls.add(t);
 			}
