@@ -24,7 +24,9 @@ class Sigil extends GameObject
 		doorNo = DoorNo;
 		objType = Reg.OBJ_SIGIL;
 		loadGraphic(AssetPaths.Sigils__png, true, 32, 32);
-		moves = false;
+		//loadRotatedGraphic(AssetPaths.Sigils__png);
+		
+		moves = true;
 		immovable = true;
 		
 		sigCollect = FlxG.sound.load(AssetPaths.Ding__wav);
@@ -33,13 +35,14 @@ class Sigil extends GameObject
 		animation.add("Sigil1", [2,3], 12, true);
 		animation.add("Sigil2", [4,5], 12, true);
 		animation.play("Sigil" + Std.string(doorNo));
-		
+		angularVelocity = -200;
 		
 	}
 	
 	public function spawn(X:Float, Y:Float):Void
 	{
-		FlxTween.circularMotion(this, X-8, Y+8, 16, FlxG.random.float(0, 360), true, 2, true, { type:FlxTween.LOOPING } );
+		FlxTween.circularMotion(this, X - 8, Y + 8, 16, FlxG.random.float(0, 360), true, 2, true, { type:FlxTween.LOOPING } );
+		
 	}
 	
 	private function set_collected(value:Bool):Bool {

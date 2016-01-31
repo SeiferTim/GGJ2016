@@ -65,7 +65,7 @@ class Reg
 					if (gamepad.anyPressed([DPAD_RIGHT]) || gamepad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) >= .2)
 						return true;
 				case KEYS_JUMP:
-					if (gamepad.anyPressed([DPAD_UP, A]) || gamepad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) <= -.2)
+					if (gamepad.anyPressed([A]) || gamepad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) <= -.2)
 						return true;
 			}
 		}
@@ -78,7 +78,7 @@ class Reg
 			case KEYS_RIGHT:
 				[D, RIGHT];
 			case KEYS_JUMP:
-				[X, UP, W];
+				[X];
 			default:
 				[];
 		};

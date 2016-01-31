@@ -34,6 +34,7 @@ class Rainbow extends FlxParticle
 					FlxSpriteUtil.alphaMask(this, c.pixels, bmp);
 					x = Target.x - Target.offset.x;
 					y = Target.y - Target.offset.y;
+					angle = Target.angle;
 					alpha = 1;
 					visible = true;
 					revive();

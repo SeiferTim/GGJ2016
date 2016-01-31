@@ -20,7 +20,7 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 	{
 		super(40);
 		
-		for (i in 0...40)
+		for (i in 0...20)
 		{
 			add(new Rainbow());
 		}
@@ -46,7 +46,7 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 				
 				if (_style == STYLE_RAINBOW)
 				{
-					_timer = .012;
+					_timer = .024;
 					_hue+= elapsed * 200;
 					if (_hue > 360)
 						_hue-= 360;
@@ -69,7 +69,7 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 								r.decayRate = 1;
 							case STYLE_SCARY:
 								cl = 0xff990000;
-								r.decayRate = .33;
+								r.decayRate = .2;
 							default:
 								cl = FlxColor.WHITE;
 						}

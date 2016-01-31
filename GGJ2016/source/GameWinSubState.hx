@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -15,6 +16,7 @@ class GameWinSubState extends FlxSubState
 	var quitButton:FlxButton;
 	var text:FlxText;
 	var callback:Int->Void;
+	private var back:FlxSprite;
 	
 	public function new(Callback:Int->Void) 
 	{
@@ -26,6 +28,10 @@ class GameWinSubState extends FlxSubState
 	
 	override public function create():Void 
 	{
+		back = new FlxSprite();
+		back.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		back.alpha = 0;
+		add(back);
 		
 		
 		text = new FlxText();
@@ -57,9 +63,15 @@ class GameWinSubState extends FlxSubState
 		quitButton.alpha = 0;
 		add(quitButton);
 		
-		FlxTween.tween(text, { "y": text.y+30, "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishText } );
+		FlxTween.tween(back, { "alpha":.5 }, .33, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishBlackIn } );
+		
 		
 		super.create();
+	}
+	
+	private function finishBlackIn(_):Void
+	{
+		FlxTween.tween(text, { "y": text.y+30, "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishText } );
 	}
 	
 	private function finishText(_):Void
