@@ -47,7 +47,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{	
 		spawn = FlxPoint.get();
-		add(new FlxSprite(0, 0, AssetPaths.background2__png));
+		add(new FlxSprite(0, 0, AssetPaths.background__png));
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
 		platforms = new FlxTypedGroup<MovingPlatform>();
