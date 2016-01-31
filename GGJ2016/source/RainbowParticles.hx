@@ -20,23 +20,14 @@ class RainbowParticles extends FlxParticle
 	public function new() 
 	{
 		super();
-		if (FlxG.random.bool())
-			loadGraphic(AssetPaths.star_50__png);
-		else
-			loadGraphic(AssetPaths.star_100__png);
+		loadGraphic(AssetPaths.sparkles__png, true, 32, 32);
 	}
 	
 	override public function onEmit():Void 
 	{
 		super.onEmit();
-		
+		animation.randomFrame();
 		hue = FlxG.random.float(0, 1);
-	}
-	
-	override public function draw():Void 
-	{
-		//dirty = true;
-		super.draw();
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -48,9 +39,8 @@ class RainbowParticles extends FlxParticle
 		hue+= elapsed;
 		if (hue > 1)
 			hue--;
-		color = FlxColor.fromHSB(hue * 360, 1, 1);
+		color = FlxColor.fromHSL(hue * 360, 1, .5);
 		
-		dirty = true;
 		super.update(elapsed);
 	}
 	/*

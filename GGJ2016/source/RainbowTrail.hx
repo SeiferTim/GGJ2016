@@ -65,9 +65,11 @@ class RainbowTrail extends FlxTypedGroup<Rainbow>
 						switch (_style) 
 						{
 							case STYLE_RAINBOW:
-								cl = FlxColor.fromHSB(_hue, 1, 1);
+								cl = FlxColor.fromHSL(_hue, 1, .5);
+								r.decayRate = 1;
 							case STYLE_SCARY:
 								cl = 0xff990000;
+								r.decayRate = .33;
 							default:
 								cl = FlxColor.WHITE;
 						}

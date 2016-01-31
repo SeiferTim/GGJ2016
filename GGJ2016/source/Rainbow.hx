@@ -10,6 +10,7 @@ import openfl.display.BitmapData;
 class Rainbow extends FlxParticle
 {
 
+	public var decayRate:Float = 2;
 	public function new() 
 	{
 		super();
@@ -47,7 +48,7 @@ class Rainbow extends FlxParticle
 	{
 		if (alive)
 		{
-			alpha -= elapsed * 2;
+			alpha -= elapsed * decayRate;
 			if (alpha <= 0)
 				kill();
 		}

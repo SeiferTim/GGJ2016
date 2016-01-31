@@ -29,6 +29,8 @@ class Imp extends GameObject
 	
 	private var hue:Float = 0;
 	public var faceFrames:FlxSprite;
+	public var isReal:Bool = true;
+	private var bmped:Bool = false;
 	
 	
 	public function new()
@@ -59,6 +61,7 @@ class Imp extends GameObject
 		
 		faceFrames.setFacingFlip(FlxObject.LEFT, true, false);
 		faceFrames.setFacingFlip ( FlxObject.RIGHT, false, false);
+		faceFrames.useFramePixels = true;
 		
 		acceleration.y = GRAVITY;
 		maxVelocity.set(400, GRAVITY);
@@ -68,63 +71,36 @@ class Imp extends GameObject
 			.add(Idle, Jump, Conditions.jump)
 			.add(Jump, Idle, Conditions.grounded)
 			.start(Idle);
+		
 	}
 	
 	override public function draw():Void 
 	{
-		if (!useFramePixels)
-			useFramePixels = true;
-		dirty = true;
+		
 		super.draw();
 	}
 	
 	override public function getFlxFrameBitmapData():BitmapData
 	{
 		
-		var doFlipX:Bool = checkFlipX();
-		var doFlipY:Bool = checkFlipY();
+		super.getFlxFrameBitmapData();
 		
-		if (!doFlipX && !doFlipY && _frame.type == FlxFrameType.REGULAR)
-		{
-			framePixels = _frame.paint(framePixels, _flashPointZero, false, true);
-		}
-		else
-		{
-			framePixels = _frame.paintRotatedAndFlipped(framePixels, _flashPointZero,
-				FlxFrameAngle.ANGLE_0, doFlipX, doFlipY, false, true);
-		}
-		
-		if (useColorTransform)
-		{
-			framePixels.colorTransform(_flashRect, colorTransform);
-		}
-		
-		if (FlxG.renderTile && useFramePixels)
-		{
-			//recreate _frame for native target, so it will use modified framePixels
-			_frameGraphic = FlxDestroyUtil.destroy(_frameGraphic);
-			_frameGraphic = FlxGraphic.fromBitmapData(framePixels, false, null, false);
-			_frame = _frameGraphic.imageFrame.frame.copyTo(_frame);
-		}
-		
-		
-		var c:FlxColor = FlxColor.fromHSB(Std.int(hue * 360), 1, 1);
+		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
-		
 		
 		if (faceFrames != null)
 		{
 			faceFrames.animation.frameIndex  = animation.frameIndex;
-			faceFrames.drawFrame(true);
-			framePixels.copyPixels(faceFrames.framePixels, faceFrames.framePixels.rect, new Point(), faceFrames.framePixels, new Point(), true);
-		}
+			faceFrames.calcFrame(true);
 			
+			framePixels.copyPixels(faceFrames.framePixels, faceFrames.framePixels.rect, new Point(), faceFrames.framePixels, new Point(), true);
+			
+		}
 		
-		
-		
-		dirty = false;
 		return framePixels;
 	}
+	
+	
 	
 	
 	override public function update(elapsed:Float):Void 
@@ -132,7 +108,6 @@ class Imp extends GameObject
 		hue+= elapsed;
 		if (hue > 1)
 			hue--;
-		
 		dirty = true;
 		fsm.update(elapsed);
 		super.update(elapsed);
@@ -153,6 +128,8 @@ class Conditions
 {
 	public static function jump(Owner:Imp):Bool
 	{
+		if (!Owner.isReal)
+			return false;
 		return (Reg.checkKeyPress(Reg.KEYS_JUMP) && Owner.isTouching(FlxObject.DOWN));
 	}
 	
@@ -168,6 +145,8 @@ class Idle extends FlxFSMState<Imp>
 {
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.animation.play("standing");
 		//owner.faceFrames.animation.play("standing");
 		
@@ -175,6 +154,8 @@ class Idle extends FlxFSMState<Imp>
 	
 	override public function update(elapsed:Float, owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.acceleration.x = 0;
 		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
@@ -216,6 +197,11 @@ class Jump extends FlxFSMState<Imp>
 	
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+<<<<<<< HEAD
+=======
+		if (!owner.isReal)
+			return;
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 		impJump = FlxG.sound.load(AssetPaths.ViolinSlideUPM__wav);
 		impJump.play();
 		owner.animation.play("jumping");
@@ -226,6 +212,8 @@ class Jump extends FlxFSMState<Imp>
 	
 	override public function update(elapsed:Float, owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.acceleration.x = 0;
 		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);

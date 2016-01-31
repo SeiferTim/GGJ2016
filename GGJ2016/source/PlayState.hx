@@ -15,6 +15,7 @@ import flixel.tile.FlxTileblock;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxArrayUtil;
+import flixel.util.FlxColor;
 import haxe.ds.IntMap;
 import haxe.Json;
 import lime.project.Platform;
@@ -38,7 +39,17 @@ class PlayState extends FlxState
 	private var castTimer:Float = 0;
 	private var spawn:FlxPoint;
 	private var death:DeathEmitter;
+	private var doorFlash:DeathEmitter;
 	private var monster:Monster;
+	private var monsterEyes:FlxSprite;
+	
+	private var impSpawn:FlxSound;
+	private var impDie:FlxSound;
+	private var wizCast:FlxSound;
+	private var doorNoise:FlxSound;
+	private var monNoise:FlxSound;
+	
+	
 	
 	private var impSpawn:FlxSound;
 	private var impDie:FlxSound;
@@ -61,7 +72,7 @@ class PlayState extends FlxState
 		monNoise = FlxG.sound.load(AssetPaths.cccreeepy__wav);
 		
 		spawn = FlxPoint.get();
-		add(new FlxSprite(0, 0, AssetPaths.background2__png));
+		add(new FlxSprite(0, 0, AssetPaths.background__png));
 		walls  = new FlxTypedGroup<FlxTilemap>();
 		entities = new FlxTypedGroup<GameObject>();
 		platforms = new FlxTypedGroup<MovingPlatform>();
@@ -169,21 +180,44 @@ class PlayState extends FlxState
 		p.kill();
 		entities.add(p);
 		
-		add(platforms);
-		add(walls);
+		
 		
 		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
 		add(r);
 		add(entities);
 		
+		add(platforms);
+		add(walls);
 		
 		monster = new Monster();
 		monster.x = -200;
 		monster.y = 112 - 60;
+		
+		var monR:RainbowTrail = new RainbowTrail(monster, RainbowTrail.STYLE_SCARY);
+		add(monR);
+		
 		add(monster);
+		
+		monsterEyes = new FlxSprite(monster.x, monster.y);
+		monsterEyes.loadGraphic(AssetPaths.creature_eyes__png, true, 60, 60);
+		monsterEyes.animation.add("eyes", [0, 1, 2], 6);
+		monsterEyes.animation.play("eyes");
+		add(monsterEyes);
+		
+		var eyesR:RainbowTrail = new RainbowTrail(monsterEyes, RainbowTrail.STYLE_SCARY);
+		add(eyesR);
 		
 		death = new DeathEmitter();
 		add(death);
+		
+		doorFlash = new DeathEmitter();
+		add(doorFlash);
+		
+		FlxG.camera.setScrollBoundsRect(0, 0, FlxG.width, FlxG.height, true);
+		FlxG.camera.follow(p);
+		
+		FlxG.camera.fade(FlxColor.BLACK, .2, true);
+		
 		super.create();
 	}
 	
@@ -215,15 +249,33 @@ class PlayState extends FlxState
 		super.destroy();
 	}
 
+	private function returnFromSubState(Response:Int):Void
+	{
+		add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
+		switch (Response)
+		{
+			case 0:
+				FlxG.switchState(new PlayState());
+			case 1:
+				FlxG.switchState(new MenuState());
+		}
+	}
+	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update(elapsed:Float):Void
 	{
+		
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
 			monNoise.play();
+<<<<<<< HEAD
 			openSubState(new GameOverSubState());
+=======
+			FlxG.camera.shake(0.02, 0.1);
+			openSubState(new GameOverSubState(returnFromSubState));
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 		}
 		else
 		{
@@ -280,12 +332,15 @@ class PlayState extends FlxState
 			FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		}
 		super.update(elapsed);
+		monsterEyes.x = monster.x;
+		//monsterEyes.animation.frameIndex = monster.animation.`
 	}
 	
 	public function playerHitsSpikes():Void
 	{
 		impDie.play();
 		p.kill();
+		FlxG.camera.shake(0.05, .1);
 		death.spawn(p.x + (p.width/2), p.y + (p.height/2));
 	}
 	
@@ -367,6 +422,11 @@ class PlayState extends FlxState
 		var o:Door = doorMap.get(ObjID);
 		if (o != null)
 		{
+<<<<<<< HEAD
+=======
+			
+			doorFlash.spawn(o.x + (o.width / 2), o.y + (o.height / 2));
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 			doorNoise.play();
 			o.open();
 		}
