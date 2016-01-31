@@ -21,6 +21,16 @@ class IntroState extends FlxState
 		madeIn.screenCenter(FlxAxes.XY);
 		add(madeIn);
 		
+		var p:Imp = new Imp();
+		p.isReal = false;
+		p.screenCenter(FlxAxes.X);
+		p.y = -600;
+		
+		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
+		add(r);
+		
+		add(p);
+		
 		FlxTween.tween(madeIn, { "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishIn } );
 		
 		

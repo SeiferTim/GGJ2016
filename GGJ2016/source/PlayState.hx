@@ -39,6 +39,7 @@ class PlayState extends FlxState
 	private var castTimer:Float = 0;
 	private var spawn:FlxPoint;
 	private var death:DeathEmitter;
+	private var doorFlash:DeathEmitter;
 	private var monster:Monster;
 	private var monsterEyes:FlxSprite;
 	
@@ -171,13 +172,14 @@ class PlayState extends FlxState
 		p.kill();
 		entities.add(p);
 		
-		add(platforms);
-		add(walls);
+		
 		
 		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
 		add(r);
 		add(entities);
 		
+		add(platforms);
+		add(walls);
 		
 		monster = new Monster();
 		monster.x = -200;
@@ -199,6 +201,12 @@ class PlayState extends FlxState
 		
 		death = new DeathEmitter();
 		add(death);
+		
+		doorFlash = new DeathEmitter();
+		add(doorFlash);
+		
+		FlxG.camera.setScrollBoundsRect(0, 0, FlxG.width, FlxG.height, true);
+		FlxG.camera.follow(p);
 		
 		FlxG.camera.fade(FlxColor.BLACK, .2, true);
 		
@@ -254,6 +262,7 @@ class PlayState extends FlxState
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
 			monNoise.play();
+			FlxG.camera.shake(0.02, 0.1);
 			openSubState(new GameOverSubState(returnFromSubState));
 		}
 		else
@@ -319,6 +328,7 @@ class PlayState extends FlxState
 	{
 		impDie.play();
 		p.kill();
+		FlxG.camera.shake(0.05, .1);
 		death.spawn(p.x + (p.width/2), p.y + (p.height/2));
 	}
 	
@@ -400,6 +410,8 @@ class PlayState extends FlxState
 		var o:Door = doorMap.get(ObjID);
 		if (o != null)
 		{
+			
+			doorFlash.spawn(o.x + (o.width / 2), o.y + (o.height / 2));
 			doorNoise.play();
 			o.open();
 		}

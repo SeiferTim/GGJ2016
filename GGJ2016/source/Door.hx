@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
@@ -28,9 +29,13 @@ class Door extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (y < startY - height)
-			kill();
-		
+		if (velocity.y < 0)
+		{
+			if (y < startY - height)
+				kill();
+			else
+				FlxG.camera.shake(0.001, elapsed*2);
+		}
 		super.update(elapsed);
 	}
 	

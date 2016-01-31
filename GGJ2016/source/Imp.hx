@@ -29,7 +29,7 @@ class Imp extends GameObject
 	
 	private var hue:Float = 0;
 	public var faceFrames:FlxSprite;
-	
+	public var isReal:Bool = true;
 	
 	public function new()
 	{
@@ -108,7 +108,7 @@ class Imp extends GameObject
 		}
 		
 		
-		var c:FlxColor = FlxColor.fromHSB(Std.int(hue * 360), 1, 1);
+		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
 		
 		
@@ -153,6 +153,8 @@ class Conditions
 {
 	public static function jump(Owner:Imp):Bool
 	{
+		if (!Owner.isReal)
+			return false;
 		return (Reg.checkKeyPress(Reg.KEYS_JUMP) && Owner.isTouching(FlxObject.DOWN));
 	}
 	
@@ -168,6 +170,8 @@ class Idle extends FlxFSMState<Imp>
 {
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.animation.play("standing");
 		//owner.faceFrames.animation.play("standing");
 		
@@ -175,6 +179,8 @@ class Idle extends FlxFSMState<Imp>
 	
 	override public function update(elapsed:Float, owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.acceleration.x = 0;
 		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
@@ -216,6 +222,8 @@ class Jump extends FlxFSMState<Imp>
 	
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		impJump = FlxG.sound.load(AssetPaths.ViolinSlideUPM__wav);
 		impJump.play();
 		owner.animation.play("jumping");
@@ -226,6 +234,8 @@ class Jump extends FlxFSMState<Imp>
 	
 	override public function update(elapsed:Float, owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+		if (!owner.isReal)
+			return;
 		owner.acceleration.x = 0;
 		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
 		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);

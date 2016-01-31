@@ -35,6 +35,7 @@ class Button extends GameObject
 		if (pressed)
 		{
 			animation.play("pressed");
+			FlxG.camera.shake(0.001, 0.1);
 			if (triggers != -1)
 			{
 				cast (FlxG.state, PlayState).triggerObj(triggers);

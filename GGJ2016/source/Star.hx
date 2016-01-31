@@ -110,7 +110,7 @@ class Star extends FlxSprite
 		}
 		
 		
-		var c:FlxColor = FlxColor.fromHSB(Std.int(hue * 360), 1, 1);
+		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
 		
 		dirty = false;
