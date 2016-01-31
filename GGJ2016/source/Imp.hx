@@ -32,6 +32,7 @@ class Imp extends GameObject
 	public var isReal:Bool = true;
 	private var bmped:Bool = false;
 	
+	
 	public function new()
 	{
 		
@@ -196,8 +197,11 @@ class Jump extends FlxFSMState<Imp>
 	
 	override public function enter(owner:Imp, fsm:FlxFSM<Imp>):Void 
 	{
+<<<<<<< HEAD
+=======
 		if (!owner.isReal)
 			return;
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 		impJump = FlxG.sound.load(AssetPaths.ViolinSlideUPM__wav);
 		impJump.play();
 		owner.animation.play("jumping");

@@ -51,6 +51,14 @@ class PlayState extends FlxState
 	
 	
 	
+	private var impSpawn:FlxSound;
+	private var impDie:FlxSound;
+	private var wizCast:FlxSound;
+	private var doorNoise:FlxSound;
+	private var monNoise:FlxSound;
+	
+	
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -262,8 +270,12 @@ class PlayState extends FlxState
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
 			monNoise.play();
+<<<<<<< HEAD
+			openSubState(new GameOverSubState());
+=======
 			FlxG.camera.shake(0.02, 0.1);
 			openSubState(new GameOverSubState(returnFromSubState));
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 		}
 		else
 		{
@@ -410,8 +422,11 @@ class PlayState extends FlxState
 		var o:Door = doorMap.get(ObjID);
 		if (o != null)
 		{
+<<<<<<< HEAD
+=======
 			
 			doorFlash.spawn(o.x + (o.width / 2), o.y + (o.height / 2));
+>>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 			doorNoise.play();
 			o.open();
 		}
