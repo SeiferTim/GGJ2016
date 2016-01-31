@@ -22,6 +22,17 @@ class MovingPlatform extends FlxTileblock
 		velocity.set(XSpeed, YSpeed);
 		xdist = XDist * 32;
 		ydist = YDist * 32;
+		if (xdist < 0)
+		{
+			startPos.x += xdist;
+			xdist = xdist * -1;
+		}
+		
+		if (ydist < 0)
+		{
+			startPos.y += ydist;
+			ydist = ydist * -1;
+		}
 		moves = true;
 		active = true;
 		allowCollisions = FlxObject.UP;

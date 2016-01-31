@@ -51,14 +51,6 @@ class PlayState extends FlxState
 	
 	
 	
-	private var impSpawn:FlxSound;
-	private var impDie:FlxSound;
-	private var wizCast:FlxSound;
-	private var doorNoise:FlxSound;
-	private var monNoise:FlxSound;
-	
-	
-	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -266,19 +258,22 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		
-		if (monster.x + (monster.width / 2) >= wiz.x)
+		if (wiz.x >= FlxG.width)
+		{
+			openSubState(new GameWinSubState(returnFromSubState));
+		}
+		else if (monster.x + (monster.width / 2) >= wiz.x)
 		{
 			monNoise.play();
-<<<<<<< HEAD
-			openSubState(new GameOverSubState());
-=======
 			FlxG.camera.shake(0.02, 0.1);
 			openSubState(new GameOverSubState(returnFromSubState));
->>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 		}
 		else
 		{
+			if ((wiz.x - monster.x) + monster.width < 200)
+			{
+				FlxG.camera.shake(0.01 * (1 - (((wiz.x - monster.x) + monster.width) / 200)) , elapsed * 2);
+			}
 			if (p.alive)
 			{
 				if (wiz.casting)
@@ -314,8 +309,11 @@ class PlayState extends FlxState
 					if (s.alpha < 1)
 						s.alpha += elapsed * 5;
 					castTimer -= elapsed;
-					if (castTimer <= 0) {
+					if (castTimer <= 0) 
+					{
 						p.reset(spawn.x, spawn.y);
+//						p.alpha = 0;
+						death.spawn(spawn.x+16, spawn.y+16);
 						impSpawn.play();	
 					}
 				}
@@ -422,11 +420,7 @@ class PlayState extends FlxState
 		var o:Door = doorMap.get(ObjID);
 		if (o != null)
 		{
-<<<<<<< HEAD
-=======
-			
 			doorFlash.spawn(o.x + (o.width / 2), o.y + (o.height / 2));
->>>>>>> f747a2e5d2ae154540af35d28f24d224c35e0799
 			doorNoise.play();
 			o.open();
 		}

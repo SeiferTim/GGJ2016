@@ -22,6 +22,7 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
+		FlxG.mouse.visible = true;
 		Reg.playMusic(1);
 		
 		add(new FlxSprite(0, 0, AssetPaths.menu_pack__png));
@@ -44,7 +45,8 @@ class MenuState extends FlxState
 		
 		var startButton:FlxButton = new FlxButton(0, 0, "Start", OnClickStartButton);
 		startButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
-		startButton.label.size = 20;
+		startButton.label.size = 18;
+		startButton.label.font = AssetPaths.LemonMilk__otf;
 		startButton.x = (FlxG.width / 4) - (startButton.width/2);
 		startButton.y = 360;
 		//startButton.onUp.sound = FlxG.sound.load(AssetPaths.Boop__wav);
@@ -52,7 +54,8 @@ class MenuState extends FlxState
 		
 		var creditsButton:FlxButton = new FlxButton(0, 0, "Credits", OnClickCreditsButton);
 		creditsButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
-		creditsButton.label.size = 20;
+		creditsButton.label.size = 18;
+		creditsButton.label.font = AssetPaths.LemonMilk__otf;
 		creditsButton.x = (FlxG.width / 4) - (startButton.width / 2);
 		creditsButton.y = 360 +  startButton.height + 20;
 		//creditsButton.onUp.sound = FlxG.sound.load(AssetPaths.Boop__wav);
@@ -83,6 +86,7 @@ class MenuState extends FlxState
 	
 	function OnClickStartButton():Void
     {
+		FlxG.mouse.visible = false;
 		FlxG.camera.fade(FlxColor.BLACK, .33, false, function() {
 			FlxG.switchState(new PlayState());
 		});

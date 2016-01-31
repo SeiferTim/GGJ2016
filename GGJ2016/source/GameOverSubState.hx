@@ -62,7 +62,8 @@ class GameOverSubState extends FlxSubState
 		
 		text = new FlxText();
 		text.text = "GAME OVER!";
-		text.size = 60;
+		text.size = 72;
+		text.font = AssetPaths.LemonMilk__otf;
 		text.color = FlxColor.WHITE;
 		text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2, 10);
 		text.screenCenter(FlxAxes.XY);
@@ -72,14 +73,16 @@ class GameOverSubState extends FlxSubState
 		
 		retryButton = new FlxButton(0, 0, "Retry", OnClickRetryButton);
 		retryButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
-		retryButton.label.size = 20;
+		retryButton.label.size = 18;
+		retryButton.label.font = AssetPaths.LemonMilk__otf;
 		retryButton.x = (FlxG.width / 4) - (retryButton.width/2);
 		retryButton.y = text.y + 30 + text.height + 50;
 		retryButton.alpha = 0;
 		add(retryButton);
 		quitButton = new FlxButton(0, 0, "Quit", OnClickQuitButton);
 		quitButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
-		quitButton.label.size = 20;
+		quitButton.label.size = 18;
+		quitButton.label.font = AssetPaths.LemonMilk__otf;
 		quitButton.x = (FlxG.width * .75) - (quitButton.width / 2);
 		quitButton.y = text.y + 30 + text.height + 50;
 		quitButton.alpha = 0;
@@ -117,9 +120,11 @@ class GameOverSubState extends FlxSubState
 	{
 		FlxTween.tween(retryButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
 		FlxTween.tween(quitButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
+		FlxG.mouse.visible = true;
 	}
 	private function OnClickRetryButton():Void
 	{
+		FlxG.mouse.visible = false;
 		closeCallback = callback.bind(0);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
@@ -129,6 +134,7 @@ class GameOverSubState extends FlxSubState
 	
 	private function OnClickQuitButton():Void
 	{
+		FlxG.mouse.visible = false;
 		closeCallback = callback.bind(1);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
