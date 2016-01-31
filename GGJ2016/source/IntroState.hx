@@ -13,6 +13,7 @@ class IntroState extends FlxState
 	private var madeIn:FlxSprite;
 	private var fall:Bool = false;
 	private var p:Imp;
+	private var ggj:FlxSprite;
 	
 	override public function create():Void 
 	{
@@ -33,6 +34,9 @@ class IntroState extends FlxState
 		add(r);
 		
 		add(p);
+		ggj = new FlxSprite(0, 0, AssetPaths.ggj__png);
+		ggj.alpha = 0;
+		add(ggj);
 		
 		FlxTween.tween(madeIn, { "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishIn } );
 		
@@ -59,10 +63,24 @@ class IntroState extends FlxState
 	
 	private function finishSound():Void
 	{
-		FlxTween.tween(madeIn, { "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, startDelay:1, onComplete:finishOut } );
+		FlxTween.tween(madeIn, { "alpha":0 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, startDelay:1, onComplete:finishOut } );
 	}
 	
 	private function finishOut(_):Void
+	{
+		
+		FlxTween.tween(ggj, { "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishGGJIn } );
+		
+		//
+	}
+	
+	private function finishGGJIn(_):Void
+	{
+		FlxTween.tween(ggj, { "alpha":0 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, startDelay:1, onComplete:finishGGJOut } );
+		
+	}
+	
+	private function finishGGJOut(_):Void
 	{
 		FlxG.switchState(new MenuState());
 	}
