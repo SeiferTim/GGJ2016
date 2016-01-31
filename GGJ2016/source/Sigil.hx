@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -13,6 +14,8 @@ class Sigil extends GameObject
 	public var collected(default, set):Bool = false;
 	public var doorNo:Int = -1;
 	private var pressTimer:Float = 0;
+	
+	private var sigCollect:FlxSound;
 
 	public function new(DoorNo:Int) 
 	{
@@ -22,6 +25,8 @@ class Sigil extends GameObject
 		loadGraphic(AssetPaths.Sigils__png, true, 32, 32);
 		moves = false;
 		immovable = true;
+		
+		sigCollect = FlxG.sound.load(AssetPaths.Ding__wav);
 		
 		animation.add("Sigil0", [0], 12, true);
 		animation.add("Sigil1", [1], 12, true);
@@ -38,6 +43,7 @@ class Sigil extends GameObject
 		
 		if (collected)
 		{
+			sigCollect.play();
 			kill();
 			if (triggers != -1)
 			{

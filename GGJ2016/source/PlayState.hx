@@ -9,6 +9,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup.FlxTypedGroupIterator;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tile.FlxTileblock;
 import flixel.tile.FlxTilemap;
@@ -39,11 +40,26 @@ class PlayState extends FlxState
 	private var death:DeathEmitter;
 	private var monster:Monster;
 	
+	private var impSpawn:FlxSound;
+	private var impDie:FlxSound;
+	private var wizCast:FlxSound;
+	private var doorNoise:FlxSound;
+	private var monNoise:FlxSound;
+	
+	
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
-	{	
+	{
+		Reg.playMusic(0);
+		impSpawn = FlxG.sound.load(AssetPaths.GiggleFX__wav);
+		impDie = FlxG.sound.load(AssetPaths.StarsDescending__wav);
+		wizCast = FlxG.sound.load(AssetPaths.CrystalBlast__wav);
+		doorNoise = FlxG.sound.load(AssetPaths.DoorSlam__wav);
+		monNoise = FlxG.sound.load(AssetPaths.cccreeepy__wav);
+		
 		spawn = FlxPoint.get();
 		add(new FlxSprite(0, 0, AssetPaths.background2__png));
 		walls  = new FlxTypedGroup<FlxTilemap>();
@@ -206,6 +222,7 @@ class PlayState extends FlxState
 	{
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
+			monNoise.play();
 			openSubState(new GameOverSubState());
 		}
 		else
@@ -239,13 +256,16 @@ class PlayState extends FlxState
 			{
 				if (wiz.casting)
 				{
+					wizCast.play();
 					s.x = wiz.x;
 					s.y = wiz.y;
 					if (s.alpha < 1)
 						s.alpha += elapsed * 5;
 					castTimer -= elapsed;
-					if (castTimer <= 0)
+					if (castTimer <= 0) {
 						p.reset(spawn.x, spawn.y);
+						impSpawn.play();	
+					}
 				}
 				else 
 				{
@@ -264,6 +284,7 @@ class PlayState extends FlxState
 	
 	public function playerHitsSpikes():Void
 	{
+		impDie.play();
 		p.kill();
 		death.spawn(p.x + (p.width/2), p.y + (p.height/2));
 	}
@@ -346,6 +367,7 @@ class PlayState extends FlxState
 		var o:Door = doorMap.get(ObjID);
 		if (o != null)
 		{
+			doorNoise.play();
 			o.open();
 		}
 	}
