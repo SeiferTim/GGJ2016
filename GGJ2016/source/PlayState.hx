@@ -155,8 +155,17 @@ class PlayState extends FlxState
 						if (ob != null)	
 						{
 							ob.angle = o.rotation;
-							ob.x = o.x;
-							ob.y = o.y+80;
+							if (o.type == "sigil")
+							{
+								cast(ob, Sigil).spawn(o.x, o.y + 80);
+								add(new RainbowTrail(ob, RainbowTrail.STYLE_RAINBOW));
+							}
+							else
+							{
+								ob.x = o.x;
+								ob.y = o.y + 80;
+							}
+							
 							objMap.set(o.id, ob);
 							entities.add(ob);
 						}
