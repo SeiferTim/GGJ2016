@@ -38,14 +38,16 @@ class MenuState extends FlxState
 		title.y = 100;
 		add(title);
 		
+<<<<<<< HEAD
 		
-		
+=======
 		var startButton:FlxButton = new FlxButton(450, 500, "Start", OnClickStartButton);
 		startButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
 		add(startButton);
 		var creditsButton:FlxButton = new FlxButton(650, 500, "Credits", OnClickCreditsButton);
 		creditsButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
 		add(creditsButton);
+>>>>>>> 0d7bd19ce1379dd547182f075eae319aaeb1e4c9
 		
 		/*
 		var text:FlxText = new FlxText(0, 0, 0, "Press any key to start...");

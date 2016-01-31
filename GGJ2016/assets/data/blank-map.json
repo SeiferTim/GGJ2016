@@ -79,8 +79,8 @@
                  "type":"sigil",
                  "visible":true,
                  "width":96,
-                 "x":63,
-                 "y":543
+                 "x":128,
+                 "y":481
                 }, 
                 {
                  "gid":5,
@@ -480,7 +480,7 @@
                  "visible":true,
                  "width":32,
                  "x":33,
-                 "y":65
+                 "y":66
                 }],
          "opacity":1,
          "type":"objectgroup",
