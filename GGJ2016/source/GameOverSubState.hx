@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -25,6 +26,8 @@ class GameOverSubState extends FlxSubState
 	
 	var callback:Int->Void;
 	
+	private var gameOverSound:FlxSound;
+	
 	public function new(Callback:Int->Void) 
 	{
 		super(FlxColor.TRANSPARENT);
@@ -33,9 +36,11 @@ class GameOverSubState extends FlxSubState
 	}
 	
 	
-	
 	override public function create():Void 
 	{
+		FlxG.sound.music.stop();
+		gameOverSound = FlxG.sound.load(AssetPaths.ViolinWail_Freaky__wav);
+		gameOverSound.play();
 		
 		blood1 = new FlxSprite(0, 0, AssetPaths.Layer1_Blood__png);
 		blood2 = new FlxSprite(0, 0, AssetPaths.Layer2_Blood__png);
@@ -93,6 +98,7 @@ class GameOverSubState extends FlxSubState
 	
 	override public function update(elapsed:Float):Void 
 	{
+		
 		if (blood1.y > FlxG.height)
 			blood1.kill();
 		if (blood2.y > FlxG.height)

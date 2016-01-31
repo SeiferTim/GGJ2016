@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSubState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -16,6 +17,8 @@ class GameWinSubState extends FlxSubState
 	var text:FlxText;
 	var callback:Int->Void;
 	
+	private var winSound:FlxSound;
+	
 	public function new(Callback:Int->Void) 
 	{
 		super(FlxColor.TRANSPARENT);
@@ -26,7 +29,9 @@ class GameWinSubState extends FlxSubState
 	
 	override public function create():Void 
 	{
-		
+		FlxG.sound.music.stop();
+		winSound = FlxG.sound.load(AssetPaths.LickyLicky__wav);
+		winSound.play();
 		
 		text = new FlxText();
 		text.text = "VICTORY!";
