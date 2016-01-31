@@ -10,9 +10,9 @@ class Monster extends FlxSprite
 	{
 		super();
 		loadGraphic(AssetPaths.Creature__png, true, 60, 60);
-		animation.add("walk", [0, 1, 2], 15);
+		animation.add("walk", [0, 1, 2], 6);
 		animation.play("walk");
-		velocity.x = 50;
+		velocity.x = 20;
 	}
 	
 }

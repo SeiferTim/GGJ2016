@@ -180,9 +180,7 @@ class PlayState extends FlxState
 				o = cast new Sigil(Triggers);
 			case "spikes":
 				o = cast new Spikes();
-				
 			case "button":
-				
 				o = cast new Button();
 			default:
 				return null;
@@ -206,54 +204,61 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		if (p.alive)
+		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
-			if (wiz.casting)
-			{
-				if (s.alpha > 0)
-					s.alpha -= elapsed * 5;
-				else
-					wiz.casting = false;
-				
-			}
-			else if ((doors[0].alive && wiz.x + wiz.width >= doors[0].x) || (doors[1].alive && wiz.x + wiz.width >= doors[1].x) || (doors[2].alive && wiz.x + wiz.width >= doors[2].x))
-			{
-				
-				wiz.velocity.x = 0;
-				wiz.animation.play("idle");
-			}
-			else
-			{
-				wiz.velocity.x = 60;
-				wiz.animation.play("walking");
-			}
-			
-			
-			
+			openSubState(new GameOverSubState());
 		}
-		else 
+		else
 		{
-			if (wiz.casting)
+			if (p.alive)
 			{
-				s.x = wiz.x;
-				s.y = wiz.y;
-				if (s.alpha < 1)
-					s.alpha += elapsed * 5;
-				castTimer -= elapsed;
-				if (castTimer <= 0)
-					p.reset(spawn.x, spawn.y);
+				if (wiz.casting)
+				{
+					if (s.alpha > 0)
+						s.alpha -= elapsed * 5;
+					else
+						wiz.casting = false;
+					
+				}
+				else if ((doors[0].alive && wiz.x + wiz.width >= doors[0].x) || (doors[1].alive && wiz.x + wiz.width >= doors[1].x) || (doors[2].alive && wiz.x + wiz.width >= doors[2].x))
+				{
+					
+					wiz.velocity.x = 0;
+					wiz.animation.play("idle");
+				}
+				else
+				{
+					wiz.velocity.x = 60;
+					wiz.animation.play("walking");
+				}
+				
+				
+				
 			}
 			else 
 			{
-				wiz.velocity.x = 0;
-				wiz.casting = true;
-				wiz.animation.play("cast");
-				castTimer = 1;
+				if (wiz.casting)
+				{
+					s.x = wiz.x;
+					s.y = wiz.y;
+					if (s.alpha < 1)
+						s.alpha += elapsed * 5;
+					castTimer -= elapsed;
+					if (castTimer <= 0)
+						p.reset(spawn.x, spawn.y);
+				}
+				else 
+				{
+					wiz.velocity.x = 0;
+					wiz.casting = true;
+					wiz.animation.play("cast");
+					castTimer = 1;
+				}
 			}
+			FlxG.collide(walls, entities);
+			FlxG.overlap(platforms, entities, null, checkPlatformCollision);
+			FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		}
-		FlxG.collide(walls, entities);
-		FlxG.overlap(platforms, entities, null, checkPlatformCollision);
-		FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		super.update(elapsed);
 	}
 	
