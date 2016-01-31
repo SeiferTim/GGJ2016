@@ -43,6 +43,10 @@ class Imp extends GameObject
 		animation.play("standing", true);
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip ( FlxObject.RIGHT, false, false);
+		width = 28;
+		height = 28;
+		offset.x = 2;
+		offset.y = 4;
 		
 		
 		faceFrames = new FlxSprite();

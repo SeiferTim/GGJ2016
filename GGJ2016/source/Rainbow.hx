@@ -13,7 +13,8 @@ class Rainbow extends FlxParticle
 	public function new() 
 	{
 		super();
-		
+		immovable = true;
+		moves  = false;
 		kill();
 	}
 	

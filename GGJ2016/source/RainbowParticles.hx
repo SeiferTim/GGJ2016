@@ -20,21 +20,16 @@ class RainbowParticles extends FlxParticle
 	public function new() 
 	{
 		super();
-		var g:FlxGraphic = FlxGraphic.fromFrames(FlxAtlasFrames.fromTexturePackerXml(AssetPaths.spritesheet_particles__png, AssetPaths.spritesheet_particles__xml));
-		frames = g.atlasFrames;
-		animation.addByIndices("red", "redCloud", [1,2,3,4], ".png", 12, false);
-		animation.addByIndices("grey", "greyCloud", [1,2,3,4], ".png", 12, false);
-		animation.addByIndices("yellow", "yellowCloud", [1,2,3,4], ".png", 12, false);
-		animation.addByIndices("orange", "orangeCloud", [1,2,3,4], ".png", 12, false);
-		animations = ["red",  "yellow", "orange"];
-		
+		if (FlxG.random.bool())
+			loadGraphic(AssetPaths.star_50__png);
+		else
+			loadGraphic(AssetPaths.star_100__png);
 	}
 	
 	override public function onEmit():Void 
 	{
 		super.onEmit();
-		FlxG.random.shuffleArray(animations, 12);
-		animation.play(animations[0], true);
+		
 		hue = FlxG.random.float(0, 1);
 	}
 	
