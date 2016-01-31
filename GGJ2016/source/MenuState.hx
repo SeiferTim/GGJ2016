@@ -26,6 +26,13 @@ class MenuState extends FlxState
 		title.y = 32;
 		add(title);
 		
+		var startButton:FlxButton = new FlxButton(450, 500, "Start", OnClickStartButton);
+		startButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
+		add(startButton);
+		var creditsButton:FlxButton = new FlxButton(650, 500, "Credits", OnClickCreditsButton);
+		creditsButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
+		add(creditsButton);
+		
 		/*
 		var text:FlxText = new FlxText(0, 0, 0, "Press any key to start...");
 		text.color = FlxColor.WHITE;
@@ -48,15 +55,14 @@ class MenuState extends FlxState
 	{
 		super.destroy();
 	}
-
-	/**
-	 * Function that is called once every frame.
-	 */
-	override public function update(elapsed:Float):Void
-	{
-		if (Reg.checkKeyPress(Reg.KEYS_JUMP)) {
-			FlxG.switchState(new PlayState());
-		}
-		super.update(elapsed);
-	}	
+	
+	function OnClickStartButton():Void
+    {
+        FlxG.switchState(new PlayState());
+    }
+	
+	function OnClickCreditsButton():Void
+    {
+        FlxG.switchState(new CreditsState());
+    }
 }
