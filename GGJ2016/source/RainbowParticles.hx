@@ -30,12 +30,6 @@ class RainbowParticles extends FlxParticle
 		hue = FlxG.random.float(0, 1);
 	}
 	
-	override public function draw():Void 
-	{
-		//dirty = true;
-		super.draw();
-	}
-	
 	override public function update(elapsed:Float):Void 
 	{
 		if (!isOnScreen(FlxG.camera))
@@ -47,7 +41,6 @@ class RainbowParticles extends FlxParticle
 			hue--;
 		color = FlxColor.fromHSL(hue * 360, 1, .5);
 		
-		dirty = true;
 		super.update(elapsed);
 	}
 	/*

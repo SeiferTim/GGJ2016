@@ -56,11 +56,13 @@ class Star extends FlxSprite
 		
 		velocity.rotate(FlxPoint.weak(), a);
 		angularVelocity = FlxG.random.float( 1, 4) * 60 * FlxG.random.sign();
+		
+		useFramePixels = true;
 	}
 
 	override public function draw():Void 
 	{
-		dirty = true;
+		
 		super.draw();
 	}
 	
@@ -83,37 +85,11 @@ class Star extends FlxSprite
 	override public function getFlxFrameBitmapData():BitmapData
 	{
 		
-		var doFlipX:Bool = checkFlipX();
-		var doFlipY:Bool = checkFlipY();
-		
-		if (!doFlipX && !doFlipY && _frame.type == FlxFrameType.REGULAR)
-		{
-			framePixels = _frame.paint(framePixels, _flashPointZero, false, true);
-		}
-		else
-		{
-			framePixels = _frame.paintRotatedAndFlipped(framePixels, _flashPointZero,
-				FlxFrameAngle.ANGLE_0, doFlipX, doFlipY, false, true);
-		}
-		
-		if (useColorTransform)
-		{
-			framePixels.colorTransform(_flashRect, colorTransform);
-		}
-		
-		if (FlxG.renderTile && useFramePixels)
-		{
-			//recreate _frame for native target, so it will use modified framePixels
-			_frameGraphic = FlxDestroyUtil.destroy(_frameGraphic);
-			_frameGraphic = FlxGraphic.fromBitmapData(framePixels, false, null, false);
-			_frame = _frameGraphic.imageFrame.frame.copyTo(_frame);
-		}
-		
+		super.getFlxFrameBitmapData();
 		
 		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
 		
-		dirty = false;
 		return framePixels;
 	}
 }

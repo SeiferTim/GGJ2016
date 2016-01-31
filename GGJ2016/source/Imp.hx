@@ -30,6 +30,7 @@ class Imp extends GameObject
 	private var hue:Float = 0;
 	public var faceFrames:FlxSprite;
 	public var isReal:Bool = true;
+	private var bmped:Bool = false;
 	
 	public function new()
 	{
@@ -59,6 +60,7 @@ class Imp extends GameObject
 		
 		faceFrames.setFacingFlip(FlxObject.LEFT, true, false);
 		faceFrames.setFacingFlip ( FlxObject.RIGHT, false, false);
+		faceFrames.useFramePixels = true;
 		
 		acceleration.y = GRAVITY;
 		maxVelocity.set(400, GRAVITY);
@@ -68,63 +70,36 @@ class Imp extends GameObject
 			.add(Idle, Jump, Conditions.jump)
 			.add(Jump, Idle, Conditions.grounded)
 			.start(Idle);
+		
 	}
 	
 	override public function draw():Void 
 	{
-		if (!useFramePixels)
-			useFramePixels = true;
-		dirty = true;
+		
 		super.draw();
 	}
 	
 	override public function getFlxFrameBitmapData():BitmapData
 	{
 		
-		var doFlipX:Bool = checkFlipX();
-		var doFlipY:Bool = checkFlipY();
-		
-		if (!doFlipX && !doFlipY && _frame.type == FlxFrameType.REGULAR)
-		{
-			framePixels = _frame.paint(framePixels, _flashPointZero, false, true);
-		}
-		else
-		{
-			framePixels = _frame.paintRotatedAndFlipped(framePixels, _flashPointZero,
-				FlxFrameAngle.ANGLE_0, doFlipX, doFlipY, false, true);
-		}
-		
-		if (useColorTransform)
-		{
-			framePixels.colorTransform(_flashRect, colorTransform);
-		}
-		
-		if (FlxG.renderTile && useFramePixels)
-		{
-			//recreate _frame for native target, so it will use modified framePixels
-			_frameGraphic = FlxDestroyUtil.destroy(_frameGraphic);
-			_frameGraphic = FlxGraphic.fromBitmapData(framePixels, false, null, false);
-			_frame = _frameGraphic.imageFrame.frame.copyTo(_frame);
-		}
-		
+		super.getFlxFrameBitmapData();
 		
 		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
 		
-		
 		if (faceFrames != null)
 		{
 			faceFrames.animation.frameIndex  = animation.frameIndex;
-			faceFrames.drawFrame(true);
-			framePixels.copyPixels(faceFrames.framePixels, faceFrames.framePixels.rect, new Point(), faceFrames.framePixels, new Point(), true);
-		}
+			faceFrames.calcFrame(true);
 			
+			framePixels.copyPixels(faceFrames.framePixels, faceFrames.framePixels.rect, new Point(), faceFrames.framePixels, new Point(), true);
+			
+		}
 		
-		
-		
-		dirty = false;
 		return framePixels;
 	}
+	
+	
 	
 	
 	override public function update(elapsed:Float):Void 
@@ -132,7 +107,6 @@ class Imp extends GameObject
 		hue+= elapsed;
 		if (hue > 1)
 			hue--;
-		
 		dirty = true;
 		fsm.update(elapsed);
 		super.update(elapsed);

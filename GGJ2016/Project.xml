@@ -30,8 +30,6 @@
 	<set name="BUILD_DIR" value="export" />
 	<classpath name="source" />
 	<assets path="assets" />
-		
-	<set name="next" value="true" />
 	
 	<!--------------------------------LIBRARIES------------------------------------->
 
@@ -79,6 +77,6 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	
 	<!--------------------------------CUSTOM---------------------------------------->
-	<haxedef name="next" />
+	
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 </project>
