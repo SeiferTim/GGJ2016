@@ -63,7 +63,7 @@ class MenuState extends FlxState
 		add(text);
 		*/
 		
-		
+		FlxG.camera.fade(FlxColor.BLACK, .5, true);
 		super.create();
 	}
 	
@@ -78,11 +78,16 @@ class MenuState extends FlxState
 	
 	function OnClickStartButton():Void
     {
-        FlxG.switchState(new PlayState());
+		FlxG.camera.fade(FlxColor.BLACK, .33, false, function() {
+			FlxG.switchState(new PlayState());
+		});
+        
     }
 	
 	function OnClickCreditsButton():Void
     {
-        FlxG.switchState(new CreditsState());
+		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {
+			FlxG.switchState(new CreditsState());
+		});
     }
 }

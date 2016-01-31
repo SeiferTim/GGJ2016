@@ -14,6 +14,7 @@ import flixel.tile.FlxTileblock;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxArrayUtil;
+import flixel.util.FlxColor;
 import haxe.ds.IntMap;
 import haxe.Json;
 import lime.project.Platform;
@@ -38,6 +39,7 @@ class PlayState extends FlxState
 	private var spawn:FlxPoint;
 	private var death:DeathEmitter;
 	private var monster:Monster;
+	private var monsterEyes:FlxSprite;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -164,10 +166,26 @@ class PlayState extends FlxState
 		monster = new Monster();
 		monster.x = -200;
 		monster.y = 112 - 60;
+		
+		var monR:RainbowTrail = new RainbowTrail(monster, RainbowTrail.STYLE_SCARY);
+		add(monR);
+		
 		add(monster);
+		
+		monsterEyes = new FlxSprite(monster.x, monster.y);
+		monsterEyes.loadGraphic(AssetPaths.creature_eyes__png, true, 60, 60);
+		monsterEyes.animation.add("eyes", [0, 1, 2], 6);
+		monsterEyes.animation.play("eyes");
+		add(monsterEyes);
+		
+		var eyesR:RainbowTrail = new RainbowTrail(monsterEyes, RainbowTrail.STYLE_SCARY);
+		add(eyesR);
 		
 		death = new DeathEmitter();
 		add(death);
+		
+		FlxG.camera.fade(FlxColor.BLACK, .2, true);
+		
 		super.create();
 	}
 	
@@ -199,14 +217,27 @@ class PlayState extends FlxState
 		super.destroy();
 	}
 
+	private function returnFromSubState(Response:Int):Void
+	{
+		add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK));
+		switch (Response)
+		{
+			case 0:
+				FlxG.switchState(new PlayState());
+			case 1:
+				FlxG.switchState(new MenuState());
+		}
+	}
+	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update(elapsed:Float):Void
 	{
+		
 		if (monster.x + (monster.width / 2) >= wiz.x)
 		{
-			openSubState(new GameOverSubState());
+			openSubState(new GameOverSubState(returnFromSubState));
 		}
 		else
 		{
@@ -260,6 +291,8 @@ class PlayState extends FlxState
 			FlxG.overlap(entities, entities, overlappedEntities, checkOverlappedEntities);
 		}
 		super.update(elapsed);
+		monsterEyes.x = monster.x;
+		//monsterEyes.animation.frameIndex = monster.animation.`
 	}
 	
 	public function playerHitsSpikes():Void
