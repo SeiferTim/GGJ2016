@@ -36,6 +36,8 @@ class PlayState extends FlxState
 	private var doors:Array<Door> = [];
 	private var castTimer:Float = 0;
 	private var spawn:FlxPoint;
+	private var death:DeathEmitter;
+	private var monster:Monster;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -157,6 +159,15 @@ class PlayState extends FlxState
 		var r:RainbowTrail = new RainbowTrail(p, RainbowTrail.STYLE_RAINBOW);
 		add(r);
 		add(entities);
+		
+		
+		monster = new Monster();
+		monster.x = -200;
+		monster.y = 112 - 60;
+		add(monster);
+		
+		death = new DeathEmitter();
+		add(death);
 		super.create();
 	}
 	
@@ -249,6 +260,7 @@ class PlayState extends FlxState
 	public function playerHitsSpikes():Void
 	{
 		p.kill();
+		death.spawn(p.x + (p.width/2), p.y + (p.height/2));
 	}
 	
 	public function overlappedEntities(ObjA:GameObject, ObjB:GameObject):Void

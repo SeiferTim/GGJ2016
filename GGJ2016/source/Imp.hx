@@ -69,6 +69,7 @@ class Imp extends GameObject
 	{
 		if (!useFramePixels)
 			useFramePixels = true;
+		dirty = true;
 		super.draw();
 	}
 	
