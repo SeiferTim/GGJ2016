@@ -15,6 +15,7 @@ import flixel.util.FlxColor;
 class GameOverSubState extends FlxSubState
 {
 
+	var ready:Bool = false;
 	var red:FlxSprite;
 	var red2:FlxSprite;
 	var blood1:FlxSprite;
@@ -39,6 +40,7 @@ class GameOverSubState extends FlxSubState
 	override public function create():Void 
 	{
 		FlxG.sound.music.stop();
+		Reg.cur_music = -1;
 		gameOverSound = FlxG.sound.load(AssetPaths.ViolinWail_Freaky__wav);
 		gameOverSound.play();
 		
@@ -93,12 +95,17 @@ class GameOverSubState extends FlxSubState
 		quitButton.alpha = 0;
 		add(quitButton);
 		
+		
+		
 		super.create();
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
-		
+		if (FlxG.keys.anyJustReleased([F4, F]))
+		{
+			Reg.toggleFullscreen();
+		}
 		if (blood1.y > FlxG.height)
 			blood1.kill();
 		if (blood2.y > FlxG.height)
@@ -119,6 +126,10 @@ class GameOverSubState extends FlxSubState
 			if (text.alpha == 0)
 				FlxTween.tween(text, { "y": text.y+30, "alpha":1 }, 1, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishBlood } );
 		}
+		
+		if (ready)
+			UIControl.checkControls(elapsed);
+		
 		super.update(elapsed);
 	}
 	
@@ -126,24 +137,31 @@ class GameOverSubState extends FlxSubState
 	{
 		FlxTween.tween(retryButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
 		FlxTween.tween(quitButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
-		FlxG.mouse.visible = true;
+		UIControl.init([retryButton, quitButton], this);
+		ready = true;
 	}
 	private function OnClickRetryButton():Void
 	{
-		FlxG.mouse.visible = false;
+		if (!ready)
+			return;
+		ready = false;
+		UIControl.unload();
 		closeCallback = callback.bind(0);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
-		});
+		}, true);
 		
 	}
 	
 	private function OnClickQuitButton():Void
 	{
-		FlxG.mouse.visible = false;
+		if (!ready)
+			return;
+		ready = false;
+		UIControl.unload();
 		closeCallback = callback.bind(1);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
-		});
+		}, true);
 	}
 }

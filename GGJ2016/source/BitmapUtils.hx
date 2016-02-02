@@ -64,11 +64,11 @@ class BitmapUtils
 			blueArr.push( Std.int((blueVal + (255 - blueVal) / 128 * i)) );
 		}
 		
-		var coloredBMP:BitmapData = bmp.clone(); 
-		coloredBMP.paletteMap(coloredBMP, new Rectangle(0,0,bmp.width,bmp.height), new Point(), redArr, greenArr, blueArr);
+		//var coloredBMP:BitmapData = bmp.clone(); 
+		bmp.paletteMap(bmp, new Rectangle(0,0,bmp.width,bmp.height), new Point(), redArr, greenArr, blueArr);
 		
 		
-		return coloredBMP;
+		return bmp;
 	}
 	
 }

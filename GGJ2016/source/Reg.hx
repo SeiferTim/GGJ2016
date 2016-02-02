@@ -30,9 +30,17 @@ class Reg
 			
 			switch (newSong) {
 				case MUS_MENU:
+					#if flash
 					FlxG.sound.playMusic(AssetPaths.GameJam3Louder__mp3, 1, true);
+					#else
+					FlxG.sound.playMusic(AssetPaths.GameJam3Louder__ogg, 1, true);
+					#end
 				case MUS_PLAY:
+					#if flash
 					FlxG.sound.playMusic(AssetPaths.GameJam1LOUDER__mp3, 1, true);
+					#else
+					FlxG.sound.playMusic(AssetPaths.GameJam1LOUDER__ogg, 1, true);
+					#end
 			}
 			
 			cur_music = newSong;
@@ -42,72 +50,63 @@ class Reg
 	
 	public static var gamepad:FlxGamepad = null;
 	
-	public static inline var KEYS_LEFT:Int = 0; // :Array<FlxKey> = [A, LEFT];
-	public static inline var KEYS_RIGHT:Int = 1; // Array<FlxKey> = [D, RIGHT];
-	public static inline var KEYS_JUMP:Int = 2; // Array<FlxKey> = [W, UP, X];
 	
-	public static function checkKeyPress(checkKeys:Int):Bool
+	static public var DEFAULT_KEYS_JUMP:FlxKey = X;
+	static public var DEFAULT_KEYS_UP:FlxKey = UP;
+	static public var DEFAULT_KEYS_DOWN:FlxKey = DOWN;
+	static public var DEFAULT_KEYS_LEFT:FlxKey = LEFT;
+	static public var DEFAULT_KEYS_RIGHT:FlxKey = RIGHT;
+	
+	static public var DEFAULT_BTNS_JUMP:FlxGamepadInputID = A;
+	static public var DEFAULT_BTNS_UP:FlxGamepadInputID = DPAD_UP;
+	static public var DEFAULT_BTNS_DOWN:FlxGamepadInputID = DPAD_DOWN;
+	static public var DEFAULT_BTNS_LEFT:FlxGamepadInputID = DPAD_LEFT;
+	static public var DEFAULT_BTNS_RIGHT:FlxGamepadInputID = DPAD_RIGHT;
+	
+	
+	static public var KEY_JUMP:Int = 0;
+	static public var KEY_SHOOT:Int = 1;
+	static public var KEY_PAUSE:Int =2;
+	static public var KEY_VOL_UP:Int = 3;
+	static public var KEY_VOL_DOWN:Int = 4;
+	static public var KEY_VOL_MUTE:Int = 5;
+	static public var KEY_UP:Int = 6;
+	static public var KEY_DOWN:Int = 7;
+	static public var KEY_LEFT:Int = 8;
+	static public var KEY_RIGHT:Int = 9;
+	
+	static public var KEY_BINDS:Array<FlxKey>;
+	static public var BTN_BINDS:Array<FlxGamepadInputID>;
+	
+	static public var keyDelay:Float = 0;
+	
+	static public inline var KEY_DELAY_BIG:Float = 0.5;
+	static public inline var KEY_DELAY_SMALL:Float = 0.05;
+	
+	static public function initKeys():Void
 	{
+		KEY_BINDS = [];
+		BTN_BINDS = [];
+		
+		KEY_BINDS[KEY_UP] = DEFAULT_KEYS_UP;
+		KEY_BINDS[KEY_DOWN] = DEFAULT_KEYS_DOWN;
+		KEY_BINDS[KEY_LEFT] = DEFAULT_KEYS_LEFT;
+		KEY_BINDS[KEY_RIGHT] = DEFAULT_KEYS_RIGHT;
+		KEY_BINDS[KEY_JUMP] = DEFAULT_KEYS_JUMP;
+		
+		#if !FLX_NO_GAMEPAD
+		BTN_BINDS[KEY_UP] = DEFAULT_BTNS_UP;
+		BTN_BINDS[KEY_DOWN] = DEFAULT_BTNS_DOWN;
+		BTN_BINDS[KEY_LEFT] = DEFAULT_BTNS_LEFT;
+		BTN_BINDS[KEY_RIGHT] = DEFAULT_BTNS_RIGHT;
+		BTN_BINDS[KEY_JUMP] = DEFAULT_BTNS_JUMP;
+		#end
 		
 		
-		if (gamepad == null)
-			gamepad = FlxG.gamepads.getFirstActiveGamepad();
-		
-		if (gamepad != null)
-		{
-			
-			switch(checkKeys)
-			{
-				case KEYS_LEFT:
-					if (gamepad.anyPressed([DPAD_LEFT]) || gamepad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) <= -.2)
-						return true;
-				case KEYS_RIGHT:
-					if (gamepad.anyPressed([DPAD_RIGHT]) || gamepad.getXAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) >= .2)
-						return true;
-				case KEYS_JUMP:
-					if (gamepad.anyPressed([A]) || gamepad.getYAxis(FlxGamepadInputID.LEFT_ANALOG_STICK) <= -.2)
-						return true;
-			}
-		}
-		
-		
-		var keys:Array<FlxKey> = switch(checkKeys)
-		{
-			case KEYS_LEFT:
-				[A, LEFT];
-			case KEYS_RIGHT:
-				[D, RIGHT];
-			case KEYS_JUMP:
-				[X];
-			default:
-				[];
-		};
-		return FlxG.keys.anyPressed(keys);
 	}
 	
-	/**
-	 * Generic levels Array that can be used for cross-state stuff.
-	 * Example usage: Storing the levels of a platformer.
-	 */
-	public static var levels:Array<Dynamic> = [];
-	/**
-	 * Generic level variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current level number.
-	 */
-	public static var level:Int = 0;
-	/**
-	 * Generic scores Array that can be used for cross-state stuff.
-	 * Example usage: Storing the scores for level.
-	 */
-	public static var scores:Array<Dynamic> = [];
-	/**
-	 * Generic score variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current score.
-	 */
-	public static var score:Int = 0;
-	/**
-	 * Generic bucket for storing different FlxSaves.
-	 * Especially useful for setting up multiple save slots.
-	 */
-	public static var saves:Array<FlxSave> = [];
+	static public function toggleFullscreen():Void
+	{
+		FlxG.fullscreen = !FlxG.fullscreen;
+	}
 }

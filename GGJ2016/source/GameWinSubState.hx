@@ -30,6 +30,8 @@ class GameWinSubState extends FlxSubState
 	
 	private var winSound:FlxSound;
 	
+	private var ready:Bool = false;
+	
 	public function new(Callback:Int->Void) 
 	{
 		super(FlxColor.TRANSPARENT);
@@ -41,6 +43,7 @@ class GameWinSubState extends FlxSubState
 	override public function create():Void 
 	{
 		FlxG.sound.music.stop();
+		Reg.cur_music = -1;
 		winSound = FlxG.sound.load(AssetPaths.LickyLicky__wav);
 		winSound.play();
 		
@@ -104,6 +107,7 @@ class GameWinSubState extends FlxSubState
 		add(cookies);
 		
 		
+		
 		FlxTween.tween(back, { "alpha":.8 }, .5, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut, onComplete:finishBlackIn } );
 		
 		
@@ -127,30 +131,40 @@ class GameWinSubState extends FlxSubState
 		impsReady = true;
 		FlxTween.tween(retryButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
 		FlxTween.tween(quitButton, { "alpha":1 }, .66, { type:FlxTween.ONESHOT, ease:FlxEase.quintOut } );
-		
-		FlxG.mouse.visible = true;
+		UIControl.init([retryButton, quitButton], this);
+		ready = true;
 	}
 	private function OnClickRetryButton():Void
 	{
-		FlxG.mouse.visible = false;
+		if (!ready)
+			return;
+		ready = false;
+		UIControl.unload();
 		closeCallback = callback.bind(0);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
-		});
+		}, true);
 		
 	}
 	
 	private function OnClickQuitButton():Void
 	{
-		FlxG.mouse.visible = false;
+		if (!ready)
+			return;
+		ready = false;
+		UIControl.unload();
 		closeCallback = callback.bind(1);
 		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {	
 			close();
-		});
+		}, true);
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (FlxG.keys.anyJustReleased([F4, F]))
+		{
+			Reg.toggleFullscreen();
+		}
 		if (impsReady)
 		{
 			impTimer -= elapsed;
@@ -185,6 +199,8 @@ class GameWinSubState extends FlxSubState
 				impRain.add(r);
 			}
 		}
+		if (ready)
+			UIControl.checkControls(elapsed);
 		super.update(elapsed);
 	}
 	

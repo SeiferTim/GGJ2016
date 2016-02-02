@@ -24,7 +24,7 @@ class Rainbow extends FlxParticle
 		
 		if (Target != null)
 		{
-			var bmp:BitmapData = Target.getFlxFrameBitmapData();
+			var bmp:BitmapData = Target.framePixels;
 			if (bmp != null)
 			{
 				

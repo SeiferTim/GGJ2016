@@ -89,6 +89,12 @@ class IntroState extends FlxState
 	override public function update(elapsed:Float):Void 
 	{
 		
+		
+		if (FlxG.keys.anyJustReleased([F4, F]))
+		{
+			Reg.toggleFullscreen();
+		}
+		
 		super.update(elapsed);
 		if (!fall)
 		{

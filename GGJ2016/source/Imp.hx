@@ -50,7 +50,7 @@ class Imp extends GameObject
 		height = 28;
 		offset.x = 2;
 		offset.y = 4;
-			
+		useFramePixels = true;	
 		
 		faceFrames = new FlxSprite();
 		faceFrames.loadGraphic(AssetPaths.Full_Color__png, true, 32, 32);
@@ -80,10 +80,10 @@ class Imp extends GameObject
 		super.draw();
 	}
 	
-	override public function getFlxFrameBitmapData():BitmapData
+	override public function updateFramePixels():BitmapData
 	{
 		
-		super.getFlxFrameBitmapData();
+		super.updateFramePixels();
 		
 		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());
@@ -109,6 +109,7 @@ class Imp extends GameObject
 		if (hue > 1)
 			hue--;
 		dirty = true;
+		
 		fsm.update(elapsed);
 		if (!isReal)
 		{
@@ -138,7 +139,7 @@ class Conditions
 	{
 		if (!Owner.isReal)
 			return false;
-		return (Reg.checkKeyPress(Reg.KEYS_JUMP) && Owner.isTouching(FlxObject.DOWN));
+		return (UIControl.isPressed([Reg.KEY_JUMP]) && Owner.isTouching(FlxObject.DOWN));
 	}
 	
 	public static function grounded(Owner:Imp):Bool
@@ -165,8 +166,8 @@ class Idle extends FlxFSMState<Imp>
 		if (!owner.isReal)
 			return;
 		owner.acceleration.x = 0;
-		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
-		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
+		var left:Bool = UIControl.isPressed([Reg.KEY_LEFT]);//Reg.checkKeyPress(Reg.KEYS_LEFT);
+		var right:Bool = UIControl.isPressed([Reg.KEY_RIGHT]);//Reg.checkKeyPress(Reg.KEYS_RIGHT);
 		if (left != right)
 		{
 			owner.faceFrames.facing = owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;
@@ -220,8 +221,8 @@ class Jump extends FlxFSMState<Imp>
 		if (!owner.isReal)
 			return;
 		owner.acceleration.x = 0;
-		var left:Bool = Reg.checkKeyPress(Reg.KEYS_LEFT);
-		var right:Bool = Reg.checkKeyPress(Reg.KEYS_RIGHT);
+		var left:Bool = UIControl.isPressed([Reg.KEY_LEFT]);//Reg.checkKeyPress(Reg.KEYS_LEFT);
+		var right:Bool = UIControl.isPressed([Reg.KEY_RIGHT]);//Reg.checkKeyPress(Reg.KEYS_RIGHT);
 		if (left != right)
 		{
 			owner.faceFrames.facing = owner.facing = left ? FlxObject.LEFT : FlxObject.RIGHT;

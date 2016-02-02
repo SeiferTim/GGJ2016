@@ -16,9 +16,7 @@ import flixel.util.FlxDestroyUtil;
 class CreditsState extends FlxState
 {
 
-	private var btnPlay:FlxButton;
-	private var btnCredits:FlxButton;
-	private var buttonSound:FlxSound;
+	private var ready:Bool = false;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -107,7 +105,7 @@ class CreditsState extends FlxState
 		add(musicTitle);
 		
 		var musicCrew:FlxText = new FlxText(leftMargin, (verticalSpace+=40), width); // x, y, width
-		musicCrew.text = "Sarah Wahoff (miwic.bandcamp.com)\t\tAndy Garces (thevanillabeans.bandcamp.com)";
+		musicCrew.text = "Sarah Wahoff (miwsic.bandcamp.com)\t\tAndy Garces (thevanillabeans.bandcamp.com)";
 		musicCrew.color = FlxColor.WHITE;
 		musicCrew.size = 18;
 		musicCrew.font = AssetPaths.LemonMilk__otf;
@@ -140,8 +138,6 @@ class CreditsState extends FlxState
 		musicCrew.alignment = "center";
 		add(musicCrew);
 		
-		buttonSound = FlxG.sound.load(AssetPaths.Boop__wav);
-		
 		var backButton:FlxButton = new FlxButton(550, (verticalSpace+=40), "Back to Menu", OnClickBackButton);
 		backButton.loadGraphic("assets/images/BiggerButton.png", true, 148, 34);
 		//backButton.onUp.callback = OnButtonUp;
@@ -150,6 +146,11 @@ class CreditsState extends FlxState
 		backButton.screenCenter(FlxAxes.X);
 		add(backButton);
 
+		
+		UIControl.unload();
+		UIControl.init([backButton]);
+		
+		FlxG.camera.fade(FlxColor.BLACK, .2, true, function() { ready = true; } );
 		
 		super.create();
 	}
@@ -163,17 +164,34 @@ class CreditsState extends FlxState
 	
 	function OnClickBackButton():Void
     {
-		
-        FlxG.switchState(new MenuState());
+		if (!ready)
+			return;
+		ready = false;
+		UIControl.unload();
+		FlxG.camera.fade(FlxColor.BLACK, .2, false, function() {
+			FlxG.switchState(new MenuState());
+		}, true);
+        
     }
 	
 	
 	override public function destroy():Void
 	{
-		buttonSound = FlxDestroyUtil.destroy(buttonSound);
+		
 		super.destroy();
 	}
 	
-	
+	override public function update(elapsed:Float):Void 
+	{
+		if (FlxG.keys.anyJustReleased([F4, F]))
+		{
+			Reg.toggleFullscreen();
+		}
+		
+		if (ready)
+			UIControl.checkControls(elapsed);
+			
+		super.update(elapsed);
+	}
 	
 }

@@ -23,10 +23,10 @@ class Spell extends FlxSprite
 		useFramePixels = true;
 	}
 	
-	override public function getFlxFrameBitmapData():BitmapData
+	override public function updateFramePixels():BitmapData
 	{
 		
-		super.getFlxFrameBitmapData();
+		super.updateFramePixels();
 		
 		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
 		framePixels = framePixels.colorBitmap(c.to24Bit());

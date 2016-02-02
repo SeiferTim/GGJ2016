@@ -6,10 +6,6 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxTween;
 
-/**
- * ...
- * @author ...
- */
 class Sigil extends GameObject
 {
 	public var collected(default, set):Bool = false;
@@ -23,7 +19,20 @@ class Sigil extends GameObject
 		super();
 		doorNo = DoorNo;
 		objType = Reg.OBJ_SIGIL;
-		loadGraphic(AssetPaths.Sigils__png, true, 32, 32);
+		
+		switch (doorNo) 
+		{
+			case 0:
+				loadRotatedGraphic(AssetPaths.sigil_1__png, 360, -1, false, false, "sigil-1");
+			case 1:
+				loadRotatedGraphic(AssetPaths.sigil_2__png, 360, -1, false, false, "sigil-2");
+			case 2:
+				loadRotatedGraphic(AssetPaths.sigil_3__png, 360, -1, false, false, "sigil-3");
+			
+				
+		}
+		
+		//loadGraphic(AssetPaths.Sigils__png, true, 32, 32);
 		//loadRotatedGraphic(AssetPaths.Sigils__png);
 		
 		moves = true;
@@ -31,10 +40,6 @@ class Sigil extends GameObject
 		
 		sigCollect = FlxG.sound.load(AssetPaths.Ding__wav);
 		
-		animation.add("Sigil0", [0,1], 12, true);
-		animation.add("Sigil1", [2,3], 12, true);
-		animation.add("Sigil2", [4,5], 12, true);
-		animation.play("Sigil" + Std.string(doorNo));
 		angularVelocity = -200;
 		
 	}

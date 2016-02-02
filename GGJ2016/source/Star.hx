@@ -24,10 +24,11 @@ class Star extends FlxSprite
 		switch(Size)
 		{
 			case 1:
-				loadGraphic(AssetPaths.star_50__png, false, 50, 50);
+				loadRotatedGraphic(AssetPaths.star_50__png, 360, -1, false, false, "star-50");
 			case 2:
-				loadGraphic(AssetPaths.star_100__png, false, 100, 100);
+				loadRotatedGraphic(AssetPaths.star_100__png, 360, -1, false, false, "star-100");
 		}
+		useFramePixels = true;
 		
 	}
 	
@@ -82,13 +83,12 @@ class Star extends FlxSprite
 		super.update(elapsed);
 	}
 	
-	override public function getFlxFrameBitmapData():BitmapData
+	override public function updateFramePixels():BitmapData
 	{
 		
-		super.getFlxFrameBitmapData();
+		super.updateFramePixels();
 		
-		var c:FlxColor = FlxColor.fromHSL(Std.int(hue * 360), 1, .5);
-		framePixels = framePixels.colorBitmap(c.to24Bit());
+		framePixels = framePixels.colorBitmap(FlxColor.fromHSL(Std.int(hue * 360), 1, .5).to24Bit());
 		
 		return framePixels;
 	}
